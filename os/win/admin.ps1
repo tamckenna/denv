@@ -61,4 +61,5 @@ echo "Will need to reboot system to utilize WSL features"
 #####################################################################################################################################################
 # Configurations requiring running as Administrator                                                                                                 #
 #####################################################################################################################################################
+$env:PATH="C:\Program Files\Git\cmd;${env:PATH}"
 git config --system core.longpaths true
