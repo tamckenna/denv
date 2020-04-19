@@ -4,6 +4,9 @@
 sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
+# Caffeinate macOS for 1 hour
+caffeinate -ismu -t 3600 &
+
 # Disable Password for sudo
 # Can't run these commands with sudo; Script itself has to be run with sudo
 echo '#!/bin/sh' >> /tmp/disable_sudo_password.sh
@@ -108,19 +111,45 @@ brew bundle
 # Configure macOS Dock                                                        #
 ###############################################################################
 
-# Disable recent apps section
-defaults write com.apple.dock show-recents -bool FALSE
-
-# Remove all current applications on Dock
-defaults delete com.apple.dock persistent-apps
-#defaults delete com.apple.dock persistent-others
-
 # Autohide Dock without Animation
 defaults write com.apple.dock autohide -bool TRUE
 defaults write com.apple.dock autohide-time-modifier -int 0
 
-# Commands to configure Dock
-# Reference https://github.com/kcrawford/dockutil
+# Disable recent apps section
+defaults write com.apple.dock show-recents -bool FALSE
+
+# Configure Applications on Dock (https://github.com/kcrawford/dockutil)
+# Remove all current applications on Dock
+    #defaults delete com.apple.dock persistent-apps
+    #defaults delete com.apple.dock persistent-others
+
+# Remove default Applications on Dock
+dockutil --remove 'Safari' --allhomes
+dockutil --remove 'Mail' --allhomes
+dockutil --remove 'FaceTime' --allhomes
+dockutil --remove 'Messages' --allhomes
+dockutil --remove 'Maps' --allhomes
+dockutil --remove 'Photos' --allhomes
+dockutil --remove 'Contacts' --allhomes
+dockutil --remove 'Calendar' --allhomes
+dockutil --remove 'Reminders' --allhomes
+dockutil --remove 'Notes' --allhomes
+dockutil --remove 'Music' --allhomes
+dockutil --remove 'Podcasts' --allhomes
+dockutil --remove 'TV' --allhomes
+dockutil --remove 'News' --allhomes
+dockutil --remove 'Numbers' --allhomes
+dockutil --remove 'Keynote' --allhomes
+dockutil --remove 'Pages' --allhomes
+
+# Add Applications to Dock
+dockutil --before "App Store" --add /Applications/Google\ Chrome.app
+dockutil --before "App Store" --add /Applications/Firefox\ Developer\ Edition.app
+dockutil --before "App Store" --add /Applications/Microsoft\ Edge.app
+dockutil --before "App Store" --add /Applications/iTerm.app
+dockutil --before "App Store" --add /Applications/Visual\ Studio\ Code.app
+dockutil --before "App Store" --add /Applications/Azure\ Data\ Studio.app
+dockutil --before "App Store" --add /Applications/DBeaver.app
 
 ###############################################################################
 # Configure VS Code                                                           #
