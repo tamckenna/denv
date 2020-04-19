@@ -40,8 +40,11 @@ scoop install dotnet-sdk adoptopenjdk-lts-hotspot python go nvm
 scoop install nuget nuget-package-explorer
 scoop install ant maven gradle
 
-# IDEs/SQL Editors
-scoop install jetbrains-toolbox eclipse-jee
+# IDE/SQL Editors
+scoop config aria2-enabled false
+scoop install eclipse-jee
+scoop config aria2-enabled true
+scoop install jetbrains-toolbox
 scoop install azuredatastudio mysql-workbench dbeaver
 
 # Development Tools
@@ -49,3 +52,14 @@ scoop install github postman soapui xming windows-terminal libreoffice-stable wi
 
 # Browsers
 scoop install googlechrome firefox firefox-developer chromium brave
+
+#####################################################################################################################################################
+# User Configuration                                                                                                                                #
+#####################################################################################################################################################
+reg import "${env:USERPROFILE}/scoop/apps/vscode/current/vscode-install-context.reg"
+ssh-keygen -f "${env:USERPROFILE}/.ssh/id_rsa" -t rsa -N '""'
+
+#####################################################################################################################################################
+# Reboot System                                                                                                                                     #
+#####################################################################################################################################################
+Restart-Computer

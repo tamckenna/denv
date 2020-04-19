@@ -30,6 +30,11 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUn
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\FileSystem" /t REG_DWORD /f /v "LongPathsEnabled" /d "1"
 
 #####################################################################################################################################################
+# Install Scoop Apps' global dependencies                                                                                                           #
+#####################################################################################################################################################
+scoop install vcredist2008 vcredist2015 vcredist2019 --global
+
+#####################################################################################################################################################
 # Install Chocolatey Package Manager (https://chocolatey.org/)                                                                                      #
 #####################################################################################################################################################
 powershell -c "iwr -useb chocolatey.org/install.ps1 | iex"
