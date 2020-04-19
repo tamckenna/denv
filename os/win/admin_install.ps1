@@ -1,5 +1,9 @@
 #!/usr/bin/env pwsh
 
+# Disable UAC & unrestrict ExecutionPolicy
+reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force
+
 # Execute Decrapifier Powershell Script and remove after execution
 (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/tamckenna/denv/master/os/win/decrapifier.ps1', 'decrapifier.ps1')
 ./decrapifier.ps1 -allusers -clearstart -settingsonly
@@ -17,18 +21,15 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /t REG_DWORD /f /
 #Enable Developer Mode Windows 10
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d "1"
 
-# Install Choclatey
-iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+# Install Scoop Global tools
+scoop install 7zip git openssh --global
+
+# Install Chocolatey
+powershell -c "iwr -useb chocolatey.org/install.ps1 | iex"
 RefreshEnv
 
-# Install WSL: Ubuntu 18.04
+# Install Applications through Chocolatey
+choco install powershell-core -y
 choco install -y Microsoft-Windows-Subsystem-Linux --source="'windowsfeatures'"
 Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1804 -OutFile ~/Ubuntu.appx -UseBasicParsing
 Add-AppxPackage -Path ~/Ubuntu.appx
-RefreshEnv
-
-# Configure/Patch WSL Instance
-Ubuntu1804 install --root
-Ubuntu1804 run apt update
-Ubuntu1804 run apt upgrade -y
-Ubuntu1804 run adduser $USER
