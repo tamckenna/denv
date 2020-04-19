@@ -195,8 +195,8 @@ dockutil --before "App Store" --add /Applications/DBeaver.app
 ###############################################################################
 cd $HOME/Desktop
 curl https://raw.githubusercontent.com/tamckenna/denv/master/os/mac/Masfile -O
-mkdir $Home/Desktop/mas
-mv Masfile $Home/Desktop/mas/Brewfile
+mkdir $HOME/Desktop/mas
+mv Masfile $HOME/Desktop/mas/Brewfile
 echo "# Next Steps" >> next_steps.md
 echo "" >> next_steps.md
 echo "### Install macOS App Store applications using mas-cli" >> next_steps.md
