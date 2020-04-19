@@ -202,7 +202,7 @@ echo "" >> next_steps.md
 echo "### Install macOS App Store applications using mas-cli" >> next_steps.md
 echo "" >> next_steps.md
 echo "1. Open up App Store and login" >> next_steps.md
-echo '2. ```bashcd $HOME/Desktop/mas && brew bundle ```' >> next_steps.md
+echo '2. ```cd $HOME/Desktop/mas && brew bundle```' >> next_steps.md
 echo '' >> next_steps.md
 
 ###############################################################################
