@@ -188,7 +188,22 @@ dockutil --before "App Store" --add /Applications/DBeaver.app
 ###############################################################################
 # Configure VS Code                                                           #
 ###############################################################################
+# Configure VS Code
 
+###############################################################################
+# Setup Next Steps on Desktop                                                 #
+###############################################################################
+cd $HOME/Desktop
+curl https://raw.githubusercontent.com/tamckenna/denv/master/os/mac/Masfile -O
+mkdir $Home/Desktop/mas
+mv Masfile $Home/Desktop/mas/Brewfile
+echo "# Next Steps" >> next_steps.md
+echo "" >> next_steps.md
+echo "### Install macOS App Store applications using mas-cli" >> next_steps.md
+echo "" >> next_steps.md
+echo "1. Open up App Store and login" >> next_steps.md
+echo '2. ```bashcd $HOME/Desktop/mas && brew bundle ```' >> next_steps.md
+echo '' >> next_steps.md
 
 ###############################################################################
 # Patch System                                                                #
