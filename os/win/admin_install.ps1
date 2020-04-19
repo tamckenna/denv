@@ -29,6 +29,8 @@ RefreshEnv
 choco install 7zip git openssh -y
 choco install powershell-core -y
 choco install -y Microsoft-Windows-Subsystem-Linux --source="'windowsfeatures'"
+choco install -y Microsoft-Hyper-V-All --source="'windowsfeatures'"
+choco install docker-desktop -y
 aria2c -o Ubuntu.appx https://aka.ms/wsl-ubuntu-1804
 Add-AppxPackage -Path Ubuntu.appx
 Remove-Item -Force Ubuntu.appx
