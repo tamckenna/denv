@@ -46,7 +46,7 @@ choco install -y Microsoft-Hyper-V-All --source="'windowsfeatures'"
 #####################################################################################################################################################
 echo "Installing Chocolatey apps..."
 choco install 7zip git git-lfs openssh ssh-copy-id -y
-choco install powershell-core -y --force
+choco install powershell-core -y
 choco install docker-desktop -y
 echo "Finished installing Chocolatey apps!"
 
