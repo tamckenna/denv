@@ -107,6 +107,40 @@ ssh-keygen -q -N "" -f $HOME/.ssh/id_rsa
     # Make sure to copy down Brewfile to home directory
 brew bundle
 
+
+# Default Applications by File Type
+get-app-id(){ osascript -e "id of app \"${1}\"" ; }
+set-default-app(){ appId=`get-app-id "$1"` && duti -s "$appId" "$2" all ; }
+default-to-code(){ set-default-app "Visual Studio Code" "$1" ;}
+
+default-to-code txt
+default-to-code conf
+default-to-code bak
+#default-to-code html
+default-to-code css
+default-to-code js
+default-to-code json
+default-to-code gitignore
+default-to-code gitattributes
+default-to-code xml
+default-to-code csv
+default-to-code psv
+default-to-code dsv
+default-to-code java
+default-to-code gradle
+default-to-code properties
+default-to-code settings
+default-to-code out
+default-to-code md
+default-to-code keep
+default-to-code py
+default-to-code pl
+default-to-code sh
+default-to-code bash
+default-to-code ksh
+default-to-code ps1
+default-to-code plist
+
 ###############################################################################
 # Configure macOS Dock                                                        #
 ###############################################################################

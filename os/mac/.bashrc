@@ -17,6 +17,8 @@
     status-docker() { dResp=$(docker ps 2>&1) ; if [[ $dResp == *"Cannot connect to the Docker daemon"* ]] || [[ $dResp == *"Error response from daemon"* ]]; then return 1 ; fi ; return 0 ; }
     kill-container() { if status-docker ; then docker stop "$1" > /dev/null 2>&1 ; docker rm "$1" > /dev/null 2>&1 ; fi ; }
     convert-icns-to-png() { sips -s format png $1 --out $1.png ; }
+    get-app-id(){ osascript -e "id of app \"${1}\"" ; }
+    set-default-app(){ appId=`get-app-id "$1"` && duti -s "$appId" "$2" all ; }
     create-python-venv(){
         export PYENV_ROOT="$HOME/.pyenv" && export PATH="$PYENV_ROOT/bin:$PATH" && \
             if command -v pyenv 1>/dev/null 2>&1; then eval "$(pyenv init -)" ; fi && \
