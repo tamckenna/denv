@@ -1,0 +1,133 @@
+# Homebrew Taps
+tap "homebrew/cask"
+tap "homebrew/cask-drivers"
+tap "homebrew/cask-versions"
+tap "aws/tap"
+
+# Core Formulas
+
+# C tools
+brew "gcc"
+brew "cmake"
+brew "automake"
+brew "clang-format"
+
+# Shells
+brew "bash"
+brew "bash-completion"
+brew "zsh"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "ksh"
+cask "powershell"
+brew "man-db"
+
+# Tools
+brew "wget"
+brew "curl"
+brew "telnet"
+brew "htop"
+brew "vim"
+brew "nano"
+brew "dos2unix"
+brew "p7zip"
+brew "dtrx"
+brew "tldr"
+brew "fio"
+brew "speedtest-cli"
+
+# # SDKs
+brew "go"
+brew "node"
+brew "python"
+cask "adoptopenjdk8"
+cask "adoptopenjdk"
+cask "dotnet-sdk"
+# brew "r"
+
+# Source Control/Build Tools
+brew "ant"
+brew "maven"
+brew "gradle"
+brew "mono"
+brew "yarn"
+brew "nuget"
+brew "git"
+
+# CLIs
+brew "awscli"
+brew "aws/tap/aws-sam-cli"
+brew "azure-cli"
+brew "firebase-cli"
+cask "google-cloud-sdk"
+brew "kubectl"
+brew "terraform"
+brew "mysql-client"
+brew "nativefier"
+brew "gh"
+
+# # Content
+brew "ffmpeg"
+brew "youtube-dl"
+brew "mpv", link: false
+
+# Casks
+
+# Editors
+cask "visual-studio-code"
+cask "sublime-text"
+cask "atom"
+cask "azure-data-studio"
+cask "mysqlworkbench"
+
+# IDEs
+cask "jetbrains-toolbox"
+cask "eclipse-jee"
+cask "dbeaver-community"
+
+# Developer Tools
+cask "iterm2"
+cask "github"
+cask "postman"
+cask "react-native-debugger"
+cask "vnc-viewer"
+# cask "perforce"
+
+# # Browsers
+cask "google-chrome"
+cask "chromium"
+cask "firefox"
+cask "firefox-developer-edition"
+cask "microsoft-edge"
+# cask "brave-browser"
+# cask "opera"
+# cask "tor-browser"
+
+# # Content
+cask "vlc"
+cask "mpv"
+cask "adobe-acrobat-reader"
+# cask "gimp"
+
+# Communication
+# cask "discord"
+# cask "slack"
+# cask "webex-teams"
+# cask "whatsapp"
+# cask "microsoft-teams"
+# cask "use-engine"
+
+# Gaming
+# cask "wine-stable"
+# cask "steam"
+# cask "battle-net"
+# cask "sony-ps4-remote-play"
+
+# Utility
+cask "appcleaner"
+cask "balenaetcher"
+cask "cinch"
+cask "macs-fan-control"
+cask "keka"
+cask "skyfonts"
+# cask "qbittorrent"
