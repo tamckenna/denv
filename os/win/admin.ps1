@@ -30,11 +30,6 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUn
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\FileSystem" /t REG_DWORD /f /v "LongPathsEnabled" /d "1"
 
 #####################################################################################################################################################
-# Install Global Scoop Apps                                                                                                                         #
-#####################################################################################################################################################
-scoop install 7zip git openssh ssh-copy-id --global
-
-#####################################################################################################################################################
 # Install Chocolatey Package Manager (https://chocolatey.org/)                                                                                      #
 #####################################################################################################################################################
 powershell -c "iwr -useb chocolatey.org/install.ps1 | iex"
@@ -49,8 +44,11 @@ choco install -y Microsoft-Hyper-V-All --source="'windowsfeatures'"
 #####################################################################################################################################################
 # Install Applications using Chocolatey                                                                                                             #
 #####################################################################################################################################################
-choco install powershell-core -y
+echo "Installing Chocolatey apps..."
+choco install 7zip git git-lfs openssh ssh-copy-id -y
+choco install powershell-core -y --force
 choco install docker-desktop -y
+echo "Finished installing Chocolatey apps!"
 
 #####################################################################################################################################################
 # Install WSL Instance (Ubuntu 18.04)                                                                                                               #
