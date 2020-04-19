@@ -36,6 +36,7 @@ brew "tldr"
 brew "fio"
 brew "speedtest-cli"
 brew "dockutil"
+brew "mas"
 
 # # SDKs
 brew "go"
