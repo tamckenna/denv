@@ -40,6 +40,9 @@ powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win
   * Microsoft-Hyper-V-All
   * Microsoft-Windows-Subsystem-Linux
   * OpenSSH.Server
+* User Settings
+  * Enable git long file paths
+  * Generate SSH keys
 * Applications
   * Package Managers
     * [Scoop](https://scoop.sh/)
@@ -99,7 +102,7 @@ powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win
   * Finder Settings
     * Show all hidden files
     * Show all file extensions
-    * Disable .DS_Store on network share directories
+    * Disable __.DS_Store__ creation on network shares
     * Search functionality searches recursively in current directory
     * Show path in bar
     * Default new window to Desktop directory
