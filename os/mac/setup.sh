@@ -191,6 +191,17 @@ dockutil --before "App Store" --add /Applications/DBeaver.app
 # Commands here...
 
 ###############################################################################
+# Configure Remote Connections for admins                                     #
+###############################################################################
+# Enable Remote Login(openSSH Server)
+sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
+# Disable Remote Login(openSSH Server)
+# sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist
+
+# Enable Remote Management(VNC Server)
+sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users admin -privs -all -restart -agent -menu
+
+###############################################################################
 # Setup Next Steps on Desktop                                                 #
 ###############################################################################
 cd $HOME/Desktop
