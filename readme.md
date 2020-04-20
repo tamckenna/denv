@@ -111,6 +111,8 @@ powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win
     * Visualize CPU in dock icon
     * Show all processes
     * Sort processes by CPU usage
+  * Enable Remote Login for admins (openSSH Server)
+  * Enable Remote Management for admins (VNC Server)
 * User Settings
   * Change shell to bash shell
   * Pulls down custom [.bashrc](os/mac/.bashrc)
