@@ -31,19 +31,19 @@ powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win
     * Show all file extensions
     * Show hidden files
     * Show full directory path in title bar
-    * New window opens to "This PC"
-    * Disable recent and frequent files
+    * New window opens to __This PC__
+    * Disable recent/frequent viewed files feature
     * Set default file view to detail list
   * Default an assortment of file types to open with Visual Studio Code
   * Enable Win32 Long File Paths
 * Windows Features to enable:
   * Microsoft-Hyper-V-All
   * Microsoft-Windows-Subsystem-Linux
-  * OpenSSH.Server Service
+  * OpenSSH.Server
 * Applications
   * Package Managers
-    * Scoop
-    * Chocolatey
+    * [Scoop](https://scoop.sh/)
+    * [Chocolatey](https://chocolatey.org/)
   * System Utilities
     * 7zip
     * openSSH
@@ -114,11 +114,12 @@ powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win
   * Disable zshell warning
   * Generates SSH keys
   * Installs Homebrew
-  * Runs homebrew bundle to install formulas/casks listed in: [Brewfile](Brewfile)
+  * Runs homebrew bundle
+    * Will install formulas/casks specified in: [Brewfile](Brewfile)
   * Configures default application for file types (Visual Studio Code)
 * Applications
   * Package Managers
-    * Homebrew
+    * [Homebrew](https://brew.sh/)
   * CLI Utilities
     * wget
     * curl
