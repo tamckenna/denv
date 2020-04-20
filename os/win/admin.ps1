@@ -28,6 +28,27 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\XboxNetApiSvc" /t REG_DWORD /f /
 #####################################################################################################################################################
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d "1"
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\FileSystem" /t REG_DWORD /f /v "LongPathsEnabled" /d "1"
+$startLayoutString = @"
+<LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" >
+  <LayoutOptions StartTileGroupCellWidth="6" />
+  <DefaultLayoutOverride>
+    <StartLayoutCollection>
+      <defaultlayout:StartLayout GroupCellWidth="6" />
+    </StartLayoutCollection>
+  </DefaultLayoutOverride>
+  <CustomTaskbarLayoutCollection PinListPlacement="Replace">
+    <defaultlayout:TaskbarLayout>
+      <taskbar:TaskbarPinList>
+        <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\File Explorer.lnk" />
+      </taskbar:TaskbarPinList>
+    </defaultlayout:TaskbarLayout>
+  </CustomTaskbarLayoutCollection>
+</LayoutModificationTemplate>
+"@
+
+add-content "layout.xml" $startLayoutString
+Import-StartLayout -layoutpath "layout.xml" -mountpath $env:SYSTEMDRIVE\
+Remove-Item -Force "layout.xml"
 
 #####################################################################################################################################################
 # Install Scoop Apps' global dependencies                                                                                                           #
@@ -45,6 +66,14 @@ RefreshEnv
 #####################################################################################################################################################
 choco install -y Microsoft-Windows-Subsystem-Linux --source="'windowsfeatures'"
 choco install -y Microsoft-Hyper-V-All --source="'windowsfeatures'"
+
+#####################################################################################################################################################
+# Install Windows Capabilities                                                                                                     #
+#####################################################################################################################################################
+Add-WindowsCapability -Name OpenSSH.Server~~~~0.0.1.0 -Online
+Set-Service sshd -StartupType Automatic
+Start-Service sshd
+Get-Service -Name *ssh* | select DisplayName, Status, StartType
 
 #####################################################################################################################################################
 # Install Applications using Chocolatey                                                                                                             #

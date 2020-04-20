@@ -59,9 +59,22 @@ scoop install googlechrome firefox firefox-developer chromium brave
 reg import "${env:USERPROFILE}/scoop/apps/vscode/current/vscode-install-context.reg"
 ssh-keygen -f "${env:USERPROFILE}/.ssh/id_rsa" -t rsa -N '""'
 
+# Enable Windows Dark Mode
+Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0
+
+# Disable Windows Firewall
+Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
+
+# Exclude C drive from Windows Defender antivirus scanning
+Add-MpPreference -ExclusionPath "C:\"
+
 #####################################################################################################################################################
 # File Explorer Configuration                                                                                                                       #
 #####################################################################################################################################################
+# Disable Windows Defender Notifications
+$key="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer"
+reg add "$key" /t REG_DWORD /f /v "DisableNotificationCenter" /d "1"
+
 # Configure Default File Explorer View Settings
 $key="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 Set-ItemProperty $key Hidden 1
