@@ -68,4 +68,4 @@ echo "Will need to reboot system to utilize WSL features"
 #####################################################################################################################################################
 $env:PATH="C:\Program Files\Git\cmd;${env:PATH}"
 git config --system core.longpaths true
-powershell -c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win/fileExt.ps1 | iex"
+powershell -c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win/file.ps1 | iex"

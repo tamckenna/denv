@@ -60,6 +60,28 @@ reg import "${env:USERPROFILE}/scoop/apps/vscode/current/vscode-install-context.
 ssh-keygen -f "${env:USERPROFILE}/.ssh/id_rsa" -t rsa -N '""'
 
 #####################################################################################################################################################
+# File Explorer Configuration                                                                                                                       #
+#####################################################################################################################################################
+# Configure Default File Explorer View Settings
+$key="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+Set-ItemProperty $key Hidden 1
+Set-ItemProperty $key HideFileExt 0
+Set-ItemProperty $key LaunchTo 1
+Set-ItemProperty $key ShowRecent 0
+Set-ItemProperty $key ShowFrequent 0
+$key="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"
+Set-ItemProperty $key FullPath 1
+
+# Set Default View to Detail List
+$key="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Streams"
+$inputValue="08,00,00,00,04,00,00,00,00,00,00,00,00,77,7e,13,73,35,cf,11,ae,69,08,00,2b,2e,12,62,04,00,00,00,01,00,00,00,43,00,00,00"
+$hexValue = $inputValue.Split(',') | ForEach-Object { "0x$_"}
+New-ItemProperty -Path $key -Name Settings -PropertyType Binary -Value ([byte[]]$hexValue) -verbose -ErrorAction 'Stop'
+
+# Reset Explorer
+Stop-Process -processname explorer
+
+#####################################################################################################################################################
 # Reboot System                                                                                                                                     #
 #####################################################################################################################################################
 Restart-Computer
