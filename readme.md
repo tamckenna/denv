@@ -113,12 +113,12 @@ powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win
     * Sort processes by CPU usage
 * User Settings
   * Change shell to bash shell
-  * Pulls down custom [.bashrc](mac/os/.bashrc)
+  * Pulls down custom [.bashrc](os/mac/.bashrc)
   * Disable zshell warning
   * Generates SSH keys
   * Installs Homebrew
   * Runs homebrew bundle
-    * Will install formulas/casks specified in: [Brewfile](mac/os/Brewfile)
+    * Will install formulas/casks specified in: [Brewfile](os/mac/Brewfile)
   * Configures default application for file types (Visual Studio Code)
 * Applications
   * Package Managers
