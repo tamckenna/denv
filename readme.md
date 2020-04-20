@@ -1,6 +1,6 @@
 # Development Environment Setup
 
-## Scripts by OS
+## Scripts
 
 ### Windows
 
