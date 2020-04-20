@@ -89,6 +89,7 @@ cask "eclipse-jee"
 cask "dbeaver-community"
 
 # Developer Tools
+cask "docker"
 cask "iterm2"
 cask "github"
 cask "postman"

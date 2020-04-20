@@ -79,6 +79,7 @@ powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win
     * DBeaver
   * Development Utilities
     * git
+    * Docker Desktop
     * windows-terminal
     * postman
     * soapUI
@@ -159,6 +160,7 @@ powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win
     * MySQL Workbench
   * Development Utilities
     * git
+    * Docker Desktop
     * iTerm
     * Postman
     * VNC Viewer
