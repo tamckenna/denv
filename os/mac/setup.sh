@@ -318,6 +318,7 @@ function setup-homebrew(){
     sed -i ""  "s/REPLACE_ME_DEFAULT_ARCHIVE_TOOL/$archiver/g" $bundleFile
     echo "Installing base Formulaes and Casks from Homebrew..."
     install-base-bundle >/dev/null 2>&1
+    echo "Finished installing base Formulaes and Casks!"
 }
 
 # Export all script functions
