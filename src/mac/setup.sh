@@ -691,7 +691,7 @@ editorApp=`get-cask-artifact $editor`
 
 # Dock app order will follow order in arry (left to right)
 declare addDockList=(
-    "/Applications/${browserApp}" "/Applications/iTerm.app"
+    "/Applications/${browserApp}"
     "/Applications/${editorApp}"
 )
 
