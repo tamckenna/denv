@@ -105,6 +105,7 @@ function build-system-setup-script(){
 function build-denv-desktop-readme(){
     readmeFile=$HOME/Desktop/README.md
     curl -s "${baseUrl}/master/os/mac/desktop-readme.md" -o $readmeFile
+    echo "" >> $readmeFile
     echo "    ${macVolume}/Users/$USER/Desktop/denv/system-setup.sh" >> $readmeFile
     echo "    \`\`\`" >> $readmeFile
     echo "" >> $readmeFile
@@ -347,7 +348,7 @@ while [ "$confirm" != "y" ]; do
 
     # Base Git Repo Raw URL
     defaultUrl="https://raw.githubusercontent.com/tamckenna/denv"
-    read -p "   - Custom Content URL: " baseUrl
+    read -p "   - Custom Content URL if available: " baseUrl
     baseUrl="${baseUrl:=${defaultUrl}}"
 
     echo ""
@@ -375,8 +376,10 @@ while [ "$confirm" != "y" ]; do
     echo "   Apple Scroll: $appleScroll"
     echo "   Remote Services: $remoteServices"
     echo ""
-    echo "Custom Git URL: $baseUrl"
-    echo ""
+    if [ "$baseUrl" != "$defaultUrl" ]; then
+        echo "Custom Git URL: $baseUrl"
+        echo ""
+    fi
     read -p "Confirm? (y/n): " confirm
     confirm=`echo $confirm | tr '[:upper:]' '[:lower:]'`
     echo ""
