@@ -22,7 +22,7 @@ function configure-system-name(){
     scriptFile=/tmp/set-system-name.sh
     echo '#!/bin/sh' > $scriptFile
     echo "scutil --set HostName $1.$2" >> $scriptFile
-    echo "scutil --set LocalHostName $1.$2" >> $scriptFile
+    echo "scutil --set LocalHostName $1" >> $scriptFile
     echo "scutil --set ComputerName $1" >> $scriptFile
     chmod +x $scriptFile
     sudo $scriptFile
@@ -55,7 +55,7 @@ function set-default-archiver() {
     duti -s "$archiverId" "$1" all
 }
 function caffeinate-mac-one-hour(){
-    caffeinate -ismu -t 3600 &
+    caffeinate -ismu -t 3600 >/dev/null 2>&1 &
 }
 function stop-caffeinate(){
     killall caffeinate >/dev/null 2>&1
@@ -290,13 +290,18 @@ export -f setup-homebrew
 ###############################################################################
 echo "Please input your configuration below."
 echo "Defaults will be inside of the brackets [...]"
+echo "Leave input empty if you are unsure."
 echo ""
 while [ "$confirm" != "y" ]; do
 
     # System Name
     echo "System Name"
-    read -p "   Domain Name [local]: " newDomainName
-    read -p "   Computer Name [my-mac]: " newComputerName
+    defaultComputerName="${USER}-mbp"
+    defaultDomainName="local"
+    read -p "   Domain Name [${defaultDomainName}]: " newDomainName
+    read -p "   Computer Name [${defaultComputerName}]: " newComputerName
+    newDomainName="${newDomainName:=${defaultDomainName}}"
+    newComputerName="${newComputerName:=${defaultComputerName}}"
     echo ""
 
     # Local User
