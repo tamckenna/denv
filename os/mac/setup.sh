@@ -82,15 +82,17 @@ function autohide-dock(){
 }
 
 function disable-sudo-password(){
-    # Can't run these commands each with sudo; Script itself has to be run with sudo
-    echo '#!/bin/sh' > /tmp/disable_sudo_password.sh
-    echo 'chmod +w /etc/sudoers' >> /tmp/disable_sudo_password.sh
-    echo 'echo "" >> /etc/sudoers' >> /tmp/disable_sudo_password.sh
-    echo 'echo "%admin          ALL = (ALL) NOPASSWD:ALL" >> /etc/sudoers' >> /tmp/disable_sudo_password.sh
-    echo 'echo "" >> /etc/sudoers' >> /tmp/disable_sudo_password.sh
-    chmod +x /tmp/disable_sudo_password.sh
-    sudo /tmp/disable_sudo_password.sh
-    rm /tmp/disable_sudo_password.sh
+    sudoFile="/etc/sudoers"
+    sudoPassEnabled=`printf '%%admin\t\tALL = (ALL) ALL'`
+    sudoPassDisabled=`printf '%%admin\t\tALL = (ALL) NOPASSWD:ALL'`
+    sudo sed -i ""  "s/$sudoPassEnabled/$sudoPassDisabled/g" $sudoFile
+}
+
+function enable-sudo-password(){
+    sudoFile="/etc/sudoers"
+    sudoPassEnabled=`printf '%%admin\t\tALL = (ALL) ALL'`
+    sudoPassDisabled=`printf '%%admin\t\tALL = (ALL) NOPASSWD:ALL'`
+    sudo sed -i ""  "s/$sudoPassDisabled/$sudoPassEnabled/g" $sudoFile
 }
 
 function build-system-setup-script(){
@@ -289,6 +291,7 @@ export -f patch-sytem
 export -f configure-git-env
 export -f autohide-dock
 export -f disable-sudo-password
+export -f enable-sudo-password
 export -f build-system-setup-script
 export -f build-installer-script
 export -f build-denv-desktop-readme
@@ -339,7 +342,9 @@ while [ "$confirm" != "y" ]; do
         read -p "   Git Email: " userEmail
         echo ""
     fi
-    
+
+    echo "Select your option by number for the following prompts."
+    echo ""
     # Select Default Browser
     export declare list=("google-chrome" "safari" "firefox" "microsoft-edge" "tor-browser" "opera" "brave-browser")
     user-input-selection "Default Browser"
@@ -356,15 +361,19 @@ while [ "$confirm" != "y" ]; do
     # export editor=$selection
     export archiver="keka"
 
-    echo "System Settings"
+    echo "System Settings - Answer by either y/n"
     echo ""
 
-    # Enable Apple "Natural" scrolling
-    read -p "   - Enable \"Natural\" Scrolling? [y/n]: " appleScroll
+    # Configure Apple "Natural" scrolling
+    read -p "   - \"Natural\" Scrolling? [n]: " appleScroll
     appleScroll=`echo "${appleScroll:=n}" | tr '[:upper:]' '[:lower:]'`
 
+    # Configure sudo password required
+    read -p "   - Require Sudo Password? [n]: " sudoPassRequired
+    sudoPassRequired=`echo "${sudoPassRequired:=n}" | tr '[:upper:]' '[:lower:]'`
+
     # Enable Remote Services (openSSH server & VNC Server)
-    read -p "   - Enable Remote Services(SSH/VNC Servers)? [y/n]: " remoteServices
+    read -p "   - Remote Services(SSH/VNC)? [y]: " remoteServices
     remoteServices=`echo "${remoteServices:=y}" | tr '[:upper:]' '[:lower:]'`
 
     # Base Git Repo Raw URL
@@ -417,6 +426,7 @@ export fullName
 export userEmail
 export newComputerName
 export newDomainName
+export sudoPassRequired
 
 
 # Execute Input Configuration
@@ -428,7 +438,7 @@ caffeinate-mac-one-hour
 # Run sudo and keep timestamp refreshed till end of script
 run-sudo-and-keep-alive
 
-# Disable Password for sudo
+# Disable Password for sudo for at least the rest of the script
 disable-sudo-password
 
 # Disable App Verificaiton
@@ -553,6 +563,11 @@ setup-denv-desktop
 
 # Stop Caffeinate
 stop-caffeinate
+
+# Require Sudo Password if required
+if [ "$sudoPassRequired" = "y" ]; then
+    enable-sudo-password
+fi
 
 # Open Up App Store for login
 open /System/Applications/App\ Store.app
