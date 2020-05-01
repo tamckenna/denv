@@ -12,4 +12,4 @@
     * When in Recovery mode go to: Utilities -> Terminal
     * Run the following command (Take a picture or note since you will not be able to copy/paste)
 
-```bash
+    ```bash
