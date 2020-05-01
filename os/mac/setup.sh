@@ -102,7 +102,9 @@ function setup-denv-desktop(){
 
 function run-sudo-and-keep-alive(){
     echo $userPassword | sudo -vS 2> /dev/null
-    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+    # while true ; do
+    #     sudo -n true; sleep 60; kill -0 "$$" || exit ;
+    # done 2>/dev/null &
 }
 
 function get-mac-volume(){
@@ -179,8 +181,12 @@ function remove-dock-default-apps(){
         "Mail" "FaceTime" "Messages" "Maps" "Photos" "Contacts" "Calendar" "Reminders"
         "Notes" "Music" "Podcasts" "TV" "News" "Numbers" "Keynote" "Pages"
     )
-    for a in "${removeDockList[@]}"; do dockutil --remove "$a" --allhomes ; done
-    if [ "$browser" != "safari" ]; then dockutil --remove 'Safari' --allhomes ; fi
+    for a in "${removeDockList[@]}"; do
+        dockutil --remove "$a" --allhomes
+    done
+    if [ "$browser" != "safari" ]; then
+        dockutil --remove 'Safari' --allhomes
+    fi
 }
 
 function configure-default-browser(){
@@ -365,7 +371,9 @@ export macVolume="${macVolume:=${defaultVolume}}"
 
 # Apple's "Natural" Scrolling
 scrollBool="false"
-if [ "$appleScroll" = "y" ]; then scrollBool="true" ; fi
+if [ "$appleScroll" = "y" ]; then
+    scrollBool="true"
+fi
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool $scrollBool
 
 # Set Default Finder Preferences
@@ -385,8 +393,11 @@ setup-homebrew
 configure-git-env
 
 # Gather Default Bundle Ids for default applications
-if [ "$browser" = "safari" ]; then browserId="com.apple.Safari" ;
-else browserId=`get-cask-bundle-id "$browser"` ; fi
+if [ "$browser" = "safari" ]; then
+    browserId="com.apple.Safari"
+else
+    browserId=`get-cask-bundle-id "$browser"`
+fi
 editorId=`get-cask-bundle-id "$editor"`
 archiverId=`get-cask-bundle-id "$archiver"`
 export browserId
@@ -419,8 +430,12 @@ declare archiveFiles=(
 # Set default applications
 # for t in "${webUrisFiles[@]}"; do set-default-browser "$t" ; done
 configure-default-browser
-for t in "${textFiles[@]}"; do set-default-editor "$t" ; done
-for t in "${archiveFiles[@]}"; do set-default-archiver "$t" done
+for t in "${textFiles[@]}"; do
+    set-default-editor "$t"
+done
+for t in "${archiveFiles[@]}"; do
+    set-default-archiver "$t"
+done
 
 # Configure macOS Dock Settings
 autohide-dock
@@ -442,11 +457,16 @@ declare addDockList=(
 )
 
 # Add apps in list to dock
-for a in "${addDockList[@]}"; do dockutil --before "App Store" --add "$a" ; done
+for a in "${addDockList[@]}"; do
+    dockutil --before "App Store" --add "$a"
+done
 
 # Enable/Disable Remote Services
-if [ "$remoteServices" = "y" ]; then enable-remote-services ;
-else disable-remote-services ; fi
+if [ "$remoteServices" = "y" ]; then
+    enable-remote-services
+else
+    disable-remote-services
+fi
 
 # Patch System if update available
 patch-sytem
