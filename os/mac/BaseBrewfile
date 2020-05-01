@@ -13,9 +13,9 @@ brew "duti"
 
 # Default Apps
 cask "iterm2"
-cask "REPLACE_ME_DEFAULT_EDITOR"
-cask "REPLACE_ME_DEFAULT_ARCHIVE_TOOL"
-cask "REPLACE_ME_DEFAULT_BROWSER"
+cask "visual-studio-code"
+cask "keka"
+cask "google-chrome"
 
 # Run while running Addon installer
 cask "macs-fan-control"

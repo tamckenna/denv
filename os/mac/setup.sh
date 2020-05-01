@@ -31,7 +31,13 @@ function set-default-archiver() { duti -s "$archiverId" "$1" all ; }
 function caffeinate-mac-one-hour(){ caffeinate -ismu -t 3600 & ; }
 function stop-caffeinate(){ killall caffeinate ; }
 function patch-sytem(){ sudo softwareupdate -ia --verbose ; }
-function generate-ssh-keys(){ ssh-keygen -q -N "" -f $HOME/.ssh/id_rsa ; }
+function configure-git-env(){
+    ssh-keygen -q -N "" -f $HOME/.ssh/id_rsa
+    git config --global user.name "$fullName"
+    git config --global user.email "$userEmail"
+    echo ".DS_Store" >> $HOME/.gitignore_global
+    git config --global core.excludesfile ~/.gitignore_global
+}
 function autohide-dock(){ defaults write com.apple.dock autohide -bool TRUE ; defaults write com.apple.dock autohide-time-modifier -int 0 ; }
 
 function disable-sudo-password(){
@@ -165,8 +171,13 @@ function disable-remote-services(){
 
 # Setup Homebrew
 function setup-homebrew(){
+    cd $HOME
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" </dev/null
-    curl "${baseUrl}/master/os/mac/BaseBrewfile" -o Brewfile
+    curl "${baseUrl}/master/os/mac/BaseBrewfile" -o $HOME/Brewfile
+
+    sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $HOME/Brewfile
+    sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $HOME/Brewfile
+    sed -i ""  "s/REPLACE_ME_DEFAULT_ARCHIVE_TOOL/$archiver/g" $HOME/Brewfile
     brew bundle
 }
 
@@ -182,7 +193,7 @@ export -f set-default-archiver
 export -f caffeinate-mac-one-hour
 export -f stop-caffeinate
 export -f patch-sytem
-export -f generate-ssh-keys
+export -f configure-git-env
 export -f autohide-dock
 export -f disable-sudo-password
 export -f build-system-setup-script
@@ -207,6 +218,12 @@ while [ "$confirm" != "y" ]; do
     echo "Local System Account"
     echo "Username: ${USER}"
     read -s -p "Password: " userPassword && echo ""
+    echo ""
+
+    # Git User Setup
+    echo "Git User Setup"
+    read -p "Full Name: " fullName
+    read -p "Git Email: " userEmail
     echo ""
 
     # Select Default Browser
@@ -243,6 +260,10 @@ while [ "$confirm" != "y" ]; do
     echo "   Username: $USER"
     echo "   Password: ${userPassword//?/*}"
     echo ""
+    echo "Git User Config"
+    echo "   Full Name: $fullName"
+    echo "   Email: $userEmail"
+    echo ""
     echo "Default Applications:"
     echo "   Browser: $browser"
     echo "   Editor: $editor"
@@ -266,6 +287,8 @@ export editor
 export archiver
 export appleScroll
 export baseUrl
+export fullName
+export userEmail
 
 ###############################################################################
 # Execute Configuration Inputed                                               #
