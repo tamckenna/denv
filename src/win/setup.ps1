@@ -9,7 +9,7 @@ scoop install aria2 sudo
 #####################################################################################################################################################
 # Execute admin install script as an Administrator                                                                                                  #
 #####################################################################################################################################################
-sudo powershell -c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win/admin.ps1 | iex"
+sudo powershell -c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/src/win/admin.ps1 | iex"
 RefreshEnv
 
 #####################################################################################################################################################

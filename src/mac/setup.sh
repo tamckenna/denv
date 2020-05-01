@@ -103,7 +103,7 @@ function enable-sudo-password(){
 function build-system-setup-script(){
     scriptFile=$HOME/denv-setup.sh
     tmpfFile=$scriptFile.tmp
-    curl -s "${baseUrl}/master/os/mac/base-system-setup.sh" -o $scriptFile
+    curl -s "${baseUrl}/master/src/mac/base-system-setup.sh" -o $scriptFile
     echo "export ROOT_PATH=${macVolume}" | cat - $scriptFile > $tmpfFile && mv -f $tmpfFile $scriptFile
     echo "" | cat - $scriptFile > $tmpfFile && mv -f $tmpfFile $scriptFile
     echo "#!/bin/sh" | cat - $scriptFile > $tmpfFile && mv -f $tmpfFile $scriptFile
@@ -112,13 +112,13 @@ function build-system-setup-script(){
 
 function build-installer-script(){
     scriptFile=$HOME/Desktop/denv/installer.sh
-    curl -s "${baseUrl}/master/os/mac/installer.sh" -o $scriptFile
+    curl -s "${baseUrl}/master/src/mac/installer.sh" -o $scriptFile
     chmod +x $scriptFile
 }
 
 function build-denv-desktop-readme(){
     readmeFile=$HOME/Desktop/README.md
-    curl -s "${baseUrl}/master/os/mac/desktop-readme.md" -o $readmeFile
+    curl -s "${baseUrl}/master/src/mac/desktop-readme.md" -o $readmeFile
     echo "" >> $readmeFile
     echo "    ${macVolume}/Users/$USER/denv-setup.sh" >> $readmeFile
     echo "    \`\`\`" >> $readmeFile
@@ -128,7 +128,7 @@ function build-denv-desktop-readme(){
 function setup-denv-desktop(){
     denvDir=$HOME/Desktop/denv
     mkdir -p $denvDir
-    curl -s "${baseUrl}/master/os/mac/CustomBrewfile" -o $denvDir/Brewfile > /dev/null
+    curl -s "${baseUrl}/master/conf/mac/Brewfile" -o $denvDir/Brewfile > /dev/null
     build-system-setup-script
     build-installer-script
     build-denv-desktop-readme
@@ -252,7 +252,7 @@ set-bash-shell(){
     echo '' >> $HOME/.bash_profile
     
     # Curl down .bashrc
-    curl -s "${baseUrl}/master/os/mac/.bashrc" -o "$HOME/.bashrc"
+    curl -s "${baseUrl}/master/conf/mac/.bashrc" -o "$HOME/.bashrc"
 }
 
 function remove-dock-default-apps(){
@@ -311,7 +311,7 @@ function setup-homebrew(){
     echo "Installing Command Line Tools for Xcode & Homebrew..."
     install-homebrew >/dev/null 2>&1
     bundleFile=$HOME/.Brewfile
-    curl -s "${baseUrl}/master/os/mac/GlobalBrewfile" -o $bundleFile >/dev/null
+    curl -s "${baseUrl}/master/src/mac/Brewfile" -o $bundleFile >/dev/null
 
     sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $bundleFile
     sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $bundleFile

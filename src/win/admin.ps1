@@ -9,7 +9,7 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force
 #####################################################################################################################################################
 # Windows 10 Decrapifier Script (https://community.spiceworks.com/scripts/show/4378-windows-10-decrapifier-18xx-19xx)                               #
 #####################################################################################################################################################
-(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/tamckenna/denv/master/os/win/decrapifier.ps1', 'decrapifier.ps1')
+(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/tamckenna/denv/master/src/win/decrapifier.ps1', 'decrapifier.ps1')
 ./decrapifier.ps1 -clearstart -settingsonly
 Remove-Item -Force decrapifier.ps1
 
@@ -97,4 +97,4 @@ echo "Will need to reboot system to utilize WSL features"
 #####################################################################################################################################################
 $env:PATH="C:\Program Files\Git\cmd;${env:PATH}"
 git config --system core.longpaths true
-powershell -c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win/file.ps1 | iex"
+powershell -c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/src/win/file.ps1 | iex"
