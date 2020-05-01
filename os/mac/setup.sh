@@ -28,7 +28,9 @@ function set-default-app(){ duti -s "$1" "$2" all ; }
 function set-default-browser(){ duti -s "$browserId" "$1" all ; }
 function set-default-editor(){ duti -s "$editorId" "$1" all ; }
 function set-default-archiver() { duti -s "$archiverId" "$1" all ; }
-function caffeinate-mac-one-hour(){ caffeinate -ismu -t 3600 & ; }
+function caffeinate-mac-one-hour(){
+    caffeinate -ismu -t 3600 &
+}
 function stop-caffeinate(){ killall caffeinate ; }
 function patch-sytem(){ sudo softwareupdate -ia --verbose ; }
 function configure-git-env(){
