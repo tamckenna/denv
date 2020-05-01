@@ -23,17 +23,34 @@ function get-cask-artifact(){
     echo "${appName}.app"
 }
 
-function get-app-bundle-id(){ osascript -e "id of app \"${1}\"" ; }
-function get-cask-bundle-id(){ appName=`get-cask-artifact "$1"` ; get-app-bundle-id "$appName" ; }
-function set-default-app(){ duti -s "$1" "$2" all ; }
-function set-default-browser(){ duti -s "$browserId" "$1" all ; }
-function set-default-editor(){ duti -s "$editorId" "$1" all ; }
-function set-default-archiver() { duti -s "$archiverId" "$1" all ; }
+function get-app-bundle-id(){
+    osascript -e "id of app \"${1}\"" ; 
+}
+function get-cask-bundle-id(){
+    appName=`get-cask-artifact "$1"`
+    get-app-bundle-id "$appName"
+}
+function set-default-app(){
+    duti -s "$1" "$2" all
+}
+function set-default-browser(){
+    duti -s "$browserId" "$1" all
+}
+function set-default-editor(){
+    duti -s "$editorId" "$1" all
+}
+function set-default-archiver() {
+    duti -s "$archiverId" "$1" all
+}
 function caffeinate-mac-one-hour(){
     caffeinate -ismu -t 3600 &
 }
-function stop-caffeinate(){ killall caffeinate ; }
-function patch-sytem(){ sudo softwareupdate -ia --verbose ; }
+function stop-caffeinate(){
+    killall caffeinate ;
+}
+function patch-sytem(){
+    sudo softwareupdate -ia --verbose
+}
 function configure-git-env(){
     ssh-keygen -q -N "" -f $HOME/.ssh/id_rsa
     git config --global user.name "$fullName"
@@ -41,7 +58,9 @@ function configure-git-env(){
     echo ".DS_Store" >> $HOME/.gitignore_global
     git config --global core.excludesfile ~/.gitignore_global
 }
-function autohide-dock(){ defaults write com.apple.dock autohide -bool TRUE ; defaults write com.apple.dock autohide-time-modifier -int 0 ; }
+function autohide-dock(){
+    defaults write com.apple.dock autohide -bool TRUE ; defaults write com.apple.dock autohide-time-modifier -int 0
+}
 
 function disable-sudo-password(){
     # Can't run these commands each with sudo; Script itself has to be run with sudo
@@ -87,7 +106,9 @@ function run-sudo-and-keep-alive(){
 function get-mac-volume(){
     for a in /Volumes/*; do
         dest=`readlink "$a"`
-        if [ "$dest" = "/" ]; then macVolume="${a/ /\\ }" ; fi
+        if [ "$dest" = "/" ]; then
+            macVolume="${a/ /\\ }"
+        fi
     done
     echo "$macVolume"
 }
@@ -187,11 +208,15 @@ function disable-remote-services(){
     sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -deactivate
 }
 
+function install-homebrew(){
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" </dev/null
+}
+
 # Setup Homebrew
 function setup-homebrew(){
     cd $HOME
     echo "Installing xCode Command Line tools & Homebrew. This may take a few minutes..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" </dev/null > /dev/null
+    install-homebrew >/dev/null 2>&1
     curl "${baseUrl}/master/os/mac/BaseBrewfile" -o $HOME/Brewfile
 
     sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $HOME/Brewfile
@@ -228,6 +253,7 @@ export -f remove-dock-default-apps
 export -f configure-default-browser
 export -f enable-remote-services
 export -f disable-remote-services
+export -f install-homebrew
 export -f setup-homebrew
 
 ###############################################################################
