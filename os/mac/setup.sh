@@ -102,6 +102,12 @@ function build-system-setup-script(){
     chmod +x $scriptFile
 }
 
+function build-installer-script(){
+    scriptFile=$HOME/Desktop/denv/installer.sh
+    curl -s "${baseUrl}/master/os/mac/installer.sh" -o $scriptFile
+    chmod +x $scriptFile
+}
+
 function build-denv-desktop-readme(){
     readmeFile=$HOME/Desktop/README.md
     curl -s "${baseUrl}/master/os/mac/desktop-readme.md" -o $readmeFile
@@ -116,6 +122,7 @@ function setup-denv-desktop(){
     mkdir -p $denvDir
     curl -s "${baseUrl}/master/os/mac/AddonBrewfile" -o $denvDir/Brewfile > /dev/null
     build-system-setup-script
+    build-installer-script
     build-denv-desktop-readme
 }
 
@@ -282,6 +289,7 @@ export -f configure-git-env
 export -f autohide-dock
 export -f disable-sudo-password
 export -f build-system-setup-script
+export -f build-installer-script
 export -f build-denv-desktop-readme
 export -f setup-denv-desktop
 export -f run-sudo-and-keep-alive

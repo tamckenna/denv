@@ -5,7 +5,7 @@
     * Will install applications listed in the [Brewfile](denv/Brewfile)
 
     ```bash
-    cd $HOME/Desktop/denv && brew bundle
+    $HOME/Desktop/denv/installer.sh
     ```
 
 3. Restart sytem and hold [ Super+R ] to boot into Recovery mode
