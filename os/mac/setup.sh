@@ -92,8 +92,10 @@ function build-denv-desktop-readme(){
 }
 
 function setup-denv-desktop(){
-    mkdir -p $HOME/Desktop/denv
-    curl "${baseUrl}/master/os/mac/AddonBrewfile" -o $HOME/Desktop/denv/Brewfile
+    denvDir=$HOME/Desktop/denv
+    echo "Creating directory: $denvDir"
+    mkdir -p $denvDir
+    curl "${baseUrl}/master/os/mac/AddonBrewfile" -o $denvDir/Brewfile
     build-system-setup-script
     build-denv-desktop-readme
 }
