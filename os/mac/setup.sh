@@ -104,18 +104,18 @@ function build-system-setup-script(){
 
 function build-denv-desktop-readme(){
     readmeFile=$HOME/Desktop/README.md
-    curl -s "${baseUrl}/master/os/mac/desktop-readme.md" -o $readmeFile > /dev/null
-    echo "    ${macVolume}/Users/$USER/Desktop/denv/system-setup.sh" >> $readmeFile > /dev/null
-    echo "    \`\`\`" >> $readmeFile > /dev/null
-    echo "" >> $readmeFile > /dev/null
+    curl -s "${baseUrl}/master/os/mac/desktop-readme.md" -o $readmeFile
+    echo "    ${macVolume}/Users/$USER/Desktop/denv/system-setup.sh" >> $readmeFile
+    echo "    \`\`\`" >> $readmeFile
+    echo "" >> $readmeFile
 }
 
 function setup-denv-desktop(){
     denvDir=$HOME/Desktop/denv
     mkdir -p $denvDir
     curl -s "${baseUrl}/master/os/mac/AddonBrewfile" -o $denvDir/Brewfile > /dev/null
-    build-system-setup-script > /dev/null
-    build-denv-desktop-readme > /dev/null
+    build-system-setup-script
+    build-denv-desktop-readme
 }
 
 function run-sudo-and-keep-alive(){
@@ -289,8 +289,8 @@ export -f setup-homebrew
 # User Input Configurations                                                   #
 ###############################################################################
 echo "Please input your configuration below."
-echo "Defaults will be inside of the brackets [...]"
-echo "Leave input empty if you are unsure."
+echo "   - Defaults will be inside of the brackets [...]"
+echo "   - Leave input empty if you are unsure."
 echo ""
 while [ "$confirm" != "y" ]; do
 
