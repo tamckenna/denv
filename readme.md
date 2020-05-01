@@ -5,13 +5,13 @@
 ### Windows
 
 ```bash
-powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/os/win/setup.ps1 | iex"
+powershell - c "iwr -useb raw.githubusercontent.com/tamckenna/denv/master/src/win/setup.ps1 | iex"
 ```
 
 ### macOS
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tamckenna/denv/master/os/mac/setup.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/tamckenna/denv/master/src/mac/setup.sh)"
 ```
 
 ---
