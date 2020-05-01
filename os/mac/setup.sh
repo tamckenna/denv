@@ -46,10 +46,10 @@ function caffeinate-mac-one-hour(){
     caffeinate -ismu -t 3600 &
 }
 function stop-caffeinate(){
-    killall caffeinate ;
+    killall caffeinate >/dev/null 2>&1
 }
 function patch-sytem(){
-    sudo softwareupdate -ia --verbose
+    sudo softwareupdate -ia > /dev/null
 }
 function configure-git-env(){
     ssh-keygen -q -N "" -f $HOME/.ssh/id_rsa
@@ -85,19 +85,19 @@ function build-system-setup-script(){
 }
 
 function build-denv-desktop-readme(){
-    curl "${baseUrl}/master/os/mac/desktop-readme.md" -o $HOME/Desktop/README.md
-    echo "    ${macVolume}/Users/$USER/Desktop/denv/system-setup.sh"
-    echo "    \`\`\`"
-    echo ""
+    readmeFile=$HOME/Desktop/README.md
+    curl "${baseUrl}/master/os/mac/desktop-readme.md" -o $readmeFile > /dev/null
+    echo "    ${macVolume}/Users/$USER/Desktop/denv/system-setup.sh" >> $readmeFile > /dev/null
+    echo "    \`\`\`" >> $readmeFile > /dev/null
+    echo "" >> $readmeFile > /dev/null
 }
 
 function setup-denv-desktop(){
     denvDir=$HOME/Desktop/denv
-    echo "Creating directory: $denvDir"
     mkdir -p $denvDir
-    curl "${baseUrl}/master/os/mac/AddonBrewfile" -o $denvDir/Brewfile
-    build-system-setup-script
-    build-denv-desktop-readme
+    curl "${baseUrl}/master/os/mac/AddonBrewfile" -o $denvDir/Brewfile > /dev/null
+    build-system-setup-script > /dev/null
+    build-denv-desktop-readme > /dev/null
 }
 
 function run-sudo-and-keep-alive(){
@@ -182,10 +182,10 @@ function remove-dock-default-apps(){
         "Notes" "Music" "Podcasts" "TV" "News" "Numbers" "Keynote" "Pages"
     )
     for a in "${removeDockList[@]}"; do
-        dockutil --remove "$a" --allhomes
+        dockutil --remove "$a" --allhomes >/dev/null 2>&1
     done
     if [ "$browser" != "safari" ]; then
-        dockutil --remove 'Safari' --allhomes
+        dockutil --remove 'Safari' --allhomes >/dev/null 2>&1
     fi
 }
 
@@ -224,7 +224,7 @@ function install-homebrew(){
 function setup-homebrew(){
     echo "Installing xCode Command Line tools & Homebrew. This may take a few minutes..."
     install-homebrew >/dev/null 2>&1
-    curl "${baseUrl}/master/os/mac/BaseBrewfile" -o $HOME/Brewfile
+    curl "${baseUrl}/master/os/mac/BaseBrewfile" -o $HOME/Brewfile >/dev/null
 
     sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $HOME/Brewfile
     sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $HOME/Brewfile
