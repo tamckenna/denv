@@ -80,7 +80,7 @@ function setup-denv-desktop(){
 }
 
 function run-sudo-and-keep-alive(){
-    echo $userPassword | sudo -vS > /dev/null
+    echo $userPassword | sudo -vS 2> /dev/null
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
