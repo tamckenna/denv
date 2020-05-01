@@ -18,6 +18,11 @@ function user-input-selection(){
     export selection="${list[id]:=${list[0]}}"
 }
 
+function default-input-selection(){
+    id="$1"
+    export selection="${list[id]:=${list[0]}}"
+}
+
 function configure-system-name(){
     # Can't run these commands each with sudo; Script itself has to be run with sudo
     scriptFile=/tmp/set-system-name.sh
@@ -276,6 +281,7 @@ function setup-homebrew(){
 
 # Export all script functions
 export -f disable-app-verification
+export -f default-input-selection
 export -f user-input-selection
 export -f get-cask-artifact
 export -f configure-system-name
@@ -319,40 +325,67 @@ echo "   - Leave input empty if you are unsure."
 echo ""
 while [ "$confirm" != "y" ]; do
 
-    # System Name
-    echo "System Name"
-    defaultComputerName="${USER}-mbp"
-    defaultDomainName="local"
-    read -p "   Domain Name [${defaultDomainName}]: " newDomainName
-    read -p "   Computer Name [${defaultComputerName}]: " newComputerName
-    newDomainName="${newDomainName:=${defaultDomainName}}"
-    newComputerName="${newComputerName:=${defaultComputerName}}"
-    echo ""
-
     # Local User
     echo "Local System Account"
     echo "   Username: ${USER}"
     read -s -p "   Password: " userPassword && echo ""
     echo ""
 
-    # Git User Setup
-    if [ ! -f ~/.gitconfig ]; then
-        echo "Git User Setup"
-        read -p "   Full Name: " fullName
-        read -p "   Git Email: " userEmail
+    # Ask if just want to use default inputs
+    read -p "Use Default Setup (y/n): " defaultSetup
+    defaultSetup=`echo "${defaultSetup:=n}" | tr '[:upper:]' '[:lower:]'`
+
+    # System Name
+    
+    defaultComputerName="${USER}-mbp"
+    defaultDomainName="local"
+
+    if [ "$defaultSetup" != "y" ]; then
+        echo ""
+        echo "System Name"
+        read -p "   Domain Name [${defaultDomainName}]: " newDomainName
+        read -p "   Computer Name [${defaultComputerName}]: " newComputerName
         echo ""
     fi
+    
+    newDomainName="${newDomainName:=${defaultDomainName}}"
+    newComputerName="${newComputerName:=${defaultComputerName}}"
 
-    echo "Select your option by number for the following prompts."
-    echo ""
+    # Git User Setup
+    if [ ! -f ~/.gitconfig ]; then
+        if [ "$defaultSetup" = "y" ]; then
+            fullName="$USER"
+            userEmail="${USER}@${newDomainName}"
+        else
+            echo "Git User Setup"
+            read -p "   Full Name: " fullName
+            read -p "   Git Email: " userEmail
+            echo ""
+        fi
+    fi
+
+    if [ "$defaultSetup" != "y" ]; then
+        echo "Select your option by number for the following prompts."
+        echo ""
+    fi 
+    
     # Select Default Browser
+    
     export declare list=("google-chrome" "safari" "firefox" "microsoft-edge" "tor-browser" "opera" "brave-browser")
-    user-input-selection "Default Browser"
+    if [ "$defaultSetup" = "y" ]; then
+        default-input-selection "0"
+    else
+        user-input-selection "Default Browser"
+    fi
     export browser=$selection
 
     # Select Default GUI Text Editor
     export declare list=("visual-studio-code" "sublime-text" "atom" "bbedit" "textmate")
-    user-input-selection "Default Text Editor"
+    if [ "$defaultSetup" = "y" ]; then
+        default-input-selection "0"
+    else
+        user-input-selection "Default Text Editor"
+    fi
     export editor=$selection
 
     # Select Default Archive Tool
@@ -361,35 +394,45 @@ while [ "$confirm" != "y" ]; do
     # export editor=$selection
     export archiver="keka"
 
-    echo "System Settings - Answer by either y/n"
-    echo ""
+    if [ "$defaultSetup" != "y" ]; then
+        echo "System Settings - Answer by either y/n"
+        echo ""
+    fi
 
     # Configure Apple "Natural" scrolling
-    read -p "   - \"Natural\" Scrolling? [n]: " appleScroll
+    if [ "$defaultSetup" != "y" ]; then
+        read -p "   - \"Natural\" Scrolling? [n]: " appleScroll
+    fi
     appleScroll=`echo "${appleScroll:=n}" | tr '[:upper:]' '[:lower:]'`
 
     # Configure sudo password required
-    read -p "   - Require Sudo Password? [n]: " sudoPassRequired
+    if [ "$defaultSetup" != "y" ]; then
+        read -p "   - Require Sudo Password? [n]: " sudoPassRequired
+    fi
     sudoPassRequired=`echo "${sudoPassRequired:=n}" | tr '[:upper:]' '[:lower:]'`
 
     # Enable Remote Services (openSSH server & VNC Server)
-    read -p "   - Remote Services(SSH/VNC)? [y]: " remoteServices
+    if [ "$defaultSetup" != "y" ]; then
+        read -p "   - Remote Services(SSH/VNC)? [y]: " remoteServices
+    fi
     remoteServices=`echo "${remoteServices:=y}" | tr '[:upper:]' '[:lower:]'`
 
     # Base Git Repo Raw URL
+    if [ "$defaultSetup" != "y" ]; then
+        read -p "   - Custom Content URL if available: " baseUrl
+    fi
     defaultUrl="https://raw.githubusercontent.com/tamckenna/denv"
-    read -p "   - Custom Content URL if available: " baseUrl
     baseUrl="${baseUrl:=${defaultUrl}}"
 
+    echo ""
+    echo "Local System Account"
+    echo "   Username: $USER"
+    echo "   Password: ${userPassword//?/*}"
     echo ""
     echo "System Name"
     echo "   Domain: $newDomainName"
     echo "   Computer: $newComputerName"
     echo "   FQDN: $newComputerName.$newDomainName"
-    echo ""
-    echo "Local System Account"
-    echo "   Username: $USER"
-    echo "   Password: ${userPassword//?/*}"
     if [ ! -f ~/.gitconfig ]; then
         echo ""
         echo "Git User Config"
@@ -404,6 +447,7 @@ while [ "$confirm" != "y" ]; do
     echo ""
     echo "System Settings"
     echo "   Apple Scroll: $appleScroll"
+    echo "   Require Sudo Password: $sudoPassRequired"
     echo "   Remote Services: $remoteServices"
     echo ""
     if [ "$baseUrl" != "$defaultUrl" ]; then
@@ -427,6 +471,7 @@ export userEmail
 export newComputerName
 export newDomainName
 export sudoPassRequired
+export remoteServices
 
 
 # Execute Input Configuration
@@ -549,10 +594,10 @@ for a in "${addDockList[@]}"; do
 done
 
 # Enable/Disable Remote Services
-if [ "$remoteServices" = "y" ]; then
-    enable-remote-services
-else
+if [ "$remoteServices" = "n" ]; then
     disable-remote-services
+else
+    enable-remote-services
 fi
 
 # Patch System if update available
