@@ -522,7 +522,8 @@ export remoteServices
 
 
 # Execute Input Configuration
-
+echo "We'll automate the rest from here. Take a break; you deserve it!"
+echo ""
 
 # Run sudo and keep timestamp refreshed till end of script
 run-sudo-and-keep-alive
