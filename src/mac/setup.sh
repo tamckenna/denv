@@ -35,6 +35,16 @@ function configure-system-name(){
     rm $scriptFile
 }
 
+function get-shell-path(){
+    if [ "$defaultShell" = "zsh" ]; then
+        echo '/usr/local/bin/zsh'
+    elif [ "$defaultShell" = "ksh" ]; then
+        echo '/usr/local/bin/ksh'
+    else
+        echo '/usr/local/bin/bash'
+    fi
+}
+
 function get-cask-artifact(){
     appLine=`brew cask info $1 | sed '1,/Artifacts/d'`
     appName="${appLine%%.app*}"
@@ -242,18 +252,34 @@ set-activity-monitor-preferences(){
     defaults write com.apple.ActivityMonitor SortDirection -int 0
 }
 
-set-bash-shell(){
-    sudo chsh -s /bin/bash
-    sudo chsh -s /bin/bash $USER
+set-default-shell(){
 
-    # Create .bash_profile file
-    echo '# bash_profile file (Runs every login shell)' >> $HOME/.bash_profile
-    echo '[[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile ' >> $HOME/.bash_profile
-    echo '[[ -s "$HOME/.bashrc" ]] && source "$HOME/.bashrc" # Load the .bashrc file ' >> $HOME/.bash_profile
-    echo '' >> $HOME/.bash_profile
-    
-    # Curl down .bashrc
-    curl -s "${baseUrl}/master/conf/mac/.bashrc" -o "$HOME/.bashrc"
+    # Change Shell for current user and system
+    shellPath=`get-shell-path`
+    sudo chsh -s "$shellPath"
+    sudo chsh -s "$shellPath" $USER
+
+    # Shell Profile if doesn't already exist locally
+    [ ! -f "$HOME/.profile" ] && curl -s "${baseUrl}/master/conf/mac/.profile" -o "$HOME/.profile"
+
+    # Bash Files Curl down .bashrc & .bash_profile if don't already exist locally
+    [ ! -f "$HOME/.bashrc" ] && curl -s "${baseUrl}/master/conf/mac/.bashrc" -o "$HOME/.bashrc"
+    [ ! -f "$HOME/.bash_profile" ] && curl -s "${baseUrl}/master/conf/mac/.bash_profile" -o "$HOME/.bash_profile"
+
+    # Zsh Files if don't exist locally will curl down if exist online; Otherwise use oh-my-zsh template
+    [ ! -f "$HOME/.oh-my-zsh" ] && git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+    if wget --spider "${baseUrl}/master/conf/mac/.zshrc" 2>/dev/null; then
+        curl -s "${baseUrl}/master/conf/mac/.zshrc" -o "$HOME/.zshrc"
+        [ ! -f "$HOME/.zshrc" ] && curl -s "${baseUrl}/master/conf/mac/.zshrc" -o "$HOME/.zshrc"
+    else
+        [ ! -f "$HOME/.zshrc" ] && cp $HOME/.oh-my-zsh/templates/zshrc.zsh-template $HOME/.zshrc
+    fi
+
+    # .kshrc file if doesn't exist locally will curl down from online if available
+    if wget --spider "${baseUrl}/master/conf/mac/.kshrc" 2>/dev/null; then
+        [ ! -f "$HOME/.kshrc" ] && curl -s "${baseUrl}/master/conf/mac/.kshrc" -o "$HOME/.kshrc"
+    fi
+
 }
 
 function remove-dock-default-apps(){
@@ -307,16 +333,28 @@ function install-base-bundle(){
     caffeinate -s brew bundle --global
 }
 
+function get-shell-formula-addons(){
+    if [ "$defaultShell" = "zsh" ]; then
+        echo 'brew "zsh" ; brew "zsh-autosuggestions" ; brew "zsh-syntax-highlighting"'
+    elif [ "$defaultShell" = "ksh" ]; then
+        echo 'brew "ksh"'
+    else
+        echo 'brew "bash" ; brew "bash-completion"'
+    fi
+}
+
 # Setup Homebrew
 function setup-homebrew(){
     echo "Installing Command Line Tools for Xcode & Homebrew..."
     install-homebrew >/dev/null 2>&1
     bundleFile=$HOME/.Brewfile
     curl -s "${baseUrl}/master/src/mac/Brewfile" -o $bundleFile >/dev/null
+    shellAddons=`get-shell-formula-addons`
 
     sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $bundleFile
     sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $bundleFile
     sed -i ""  "s/REPLACE_ME_DEFAULT_ARCHIVE_TOOL/$archiver/g" $bundleFile
+    sed -i "" "s/#REPLACE_ME_DEFAULT_SHELL_FORMULAES/$shellAddons/g" $bundleFile
     echo "Installing base Formulaes and Casks from Homebrew..."
     install-base-bundle >/dev/null 2>&1
     echo "Finished installing base Formulaes and Casks!"
@@ -328,6 +366,7 @@ export -f default-input-selection
 export -f user-input-selection
 export -f get-cask-artifact
 export -f configure-system-name
+export -f get-shell-path
 export -f get-app-bundle-id
 export -f get-cask-bundle-id
 export -f set-default-app
@@ -355,13 +394,14 @@ export -f enable-do-not-disturb
 export -f disable-do-not-disturb
 export -f set-finder-preferences
 export -f set-activity-monitor-preferences
-export -f set-bash-shell
+export -f set-default-shell
 export -f remove-dock-default-apps
 export -f configure-default-browser
 export -f enable-remote-services
 export -f disable-remote-services
 export -f install-homebrew
 export -f install-base-bundle
+export -f get-shell-formula-addons
 export -f setup-homebrew
 
 
@@ -416,7 +456,17 @@ while [ "$confirm" != "y" ]; do
     if [ "$defaultSetup" != "y" ]; then
         echo "Select your option by number for the following prompts."
         echo ""
-    fi 
+    fi
+
+    # Select Default Browser
+    
+    export declare list=("bash" "zsh" "ksh")
+    if [ "$defaultSetup" = "y" ]; then
+        default-input-selection "0"
+    else
+        user-input-selection "Default Shell"
+    fi
+    export defaultShell=$selection
     
     # Select Default Browser
     
@@ -490,6 +540,7 @@ while [ "$confirm" != "y" ]; do
     fi
     echo ""
     echo "Default Applications:"
+    echo "   Shell: $defaultShell"
     echo "   Browser: $browser"
     echo "   Editor: $editor"
     echo "   Arhive Tool: $archiver"
@@ -521,6 +572,7 @@ export newComputerName
 export newDomainName
 export sudoPassRequired
 export remoteServices
+export defaultShell
 
 
 # Execute Input Configuration
@@ -576,7 +628,7 @@ set-activity-monitor-preferences
 setup-homebrew
 
 # Configure User environment
-set-bash-shell
+set-default-shell
 configure-git-env
 
 # Gather Default Bundle Ids for default applications
