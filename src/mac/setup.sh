@@ -118,10 +118,11 @@ function build-installer-script(){
 
 function build-denv-desktop-readme(){
     readmeFile=$HOME/Desktop/README.md
+    endCodeBlockTag='```'
     curl -s "${baseUrl}/master/src/mac/desktop-readme.md" -o $readmeFile
     echo "" >> $readmeFile
     echo "    ${macVolume}/Users/$USER/denv-setup.sh" >> $readmeFile
-    echo "    \`\`\`" >> $readmeFile
+    echo "    ${endCodeBlockTag}" >> $readmeFile
     echo "" >> $readmeFile
 }
 
@@ -568,13 +569,14 @@ set-finder-preferences
 set-activity-monitor-preferences
 
 
-# User Environment
+# User Environment Setup
 
 
 # Install Homebew and base formulas and casks in Brewfile
 setup-homebrew
 
-# Setup Git User environment
+# Configure User environment
+set-bash-shell
 configure-git-env
 
 # Gather Default Bundle Ids for default applications
