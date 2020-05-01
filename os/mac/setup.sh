@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo ""
 ###############################################################################
 # Script Level Functions                                                      #
 ###############################################################################
@@ -8,7 +9,7 @@ function user-input-selection(){
     count=0
     export selection=""
     for o in "${list[@]}"; do
-        echo "- ${count} ${o}"
+        echo "   - ${count} ${o}"
         ((count++))
     done
     read -p "Input[0]: " id
@@ -159,6 +160,21 @@ function remove-dock-default-apps(){
     if [ "$browser" != "safari" ]; then dockutil --remove 'Safari' --allhomes ; fi
 }
 
+function configure-default-browser(){
+    if [ "$browser" = "google-chrome" ]; then
+        defaultBrowser="chrome"
+    elif [ "$browser" = "brave-browser" ]; then
+        defaultBrowser="browser"
+    elif [ "$browser" = "microsoft-edge" ]; then
+        defaultBrowser="edgemac"
+    elif [ "$browser" = "tor-browser" ]; then
+        defaultBrowser="torbrowser"
+    else
+        defaultBrowser="$browser"
+    fi
+    defaultbrowser "$defaultBrowser"
+}
+
 # Enable Remote Login(SSH Server) & Remote Management(VNC Server)
 function enable-remote-services(){
     sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
@@ -174,12 +190,14 @@ function disable-remote-services(){
 # Setup Homebrew
 function setup-homebrew(){
     cd $HOME
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" </dev/null
+    echo "Installing xCode Command Line tools & Homebrew. This may take a few minutes..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" </dev/null > /dev/null
     curl "${baseUrl}/master/os/mac/BaseBrewfile" -o $HOME/Brewfile
 
     sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $HOME/Brewfile
     sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $HOME/Brewfile
     sed -i ""  "s/REPLACE_ME_DEFAULT_ARCHIVE_TOOL/$archiver/g" $HOME/Brewfile
+    echo "Installing dependency forumulas and casks. This may take a few minutes..."
     brew bundle
 }
 
@@ -207,6 +225,7 @@ export -f set-finder-preferences
 export -f set-activity-monitor-preferences
 export -f set-bash-shell
 export -f remove-dock-default-apps
+export -f configure-default-browser
 export -f enable-remote-services
 export -f disable-remote-services
 export -f setup-homebrew
@@ -219,13 +238,13 @@ while [ "$confirm" != "y" ]; do
     # Local User
     echo "Local System Account"
     echo "Username: ${USER}"
-    read -s -p "Password: " userPassword && echo ""
+    read -s -p "   Password: " userPassword && echo ""
     echo ""
 
     # Git User Setup
     echo "Git User Setup"
-    read -p "Full Name: " fullName
-    read -p "Git Email: " userEmail
+    read -p "   Full Name: " fullName
+    read -p "   Git Email: " userEmail
     echo ""
 
     # Select Default Browser
@@ -244,17 +263,20 @@ while [ "$confirm" != "y" ]; do
     # export editor=$selection
     export archiver="keka"
 
+    echo "System Settings"
+    echo ""
+
     # Enable Apple "Natural" scrolling
-    read -p "Use Apple's \"Natural\" scrolling? (y/n): " appleScroll
+    read -p "   - Enable \"Natural\" Scrolling? (y/n): " appleScroll
     appleScroll=`echo "${appleScroll:=n}" | tr '[:upper:]' '[:lower:]'`
 
     # Enable Remote Services (openSSH server & VNC Server)
-    read -p "Enable Remote Services(SSH/VNC Servers)? (y/n): " remoteServices
+    read -p "   - Enable Remote Services(SSH/VNC Servers)? (y/n): " remoteServices
     remoteServices=`echo "${remoteServices:=y}" | tr '[:upper:]' '[:lower:]'`
 
     # Base Git Repo Raw URL
     defaultUrl="https://raw.githubusercontent.com/tamckenna/denv"
-    read -p "Git Repo Raw Content URL[${defaultUrl}]: " baseUrl
+    read -p "   - Custom Content URL[Leave empty for Default]: " baseUrl
     baseUrl="${baseUrl:=${defaultUrl}}"
 
     echo ""
@@ -329,8 +351,8 @@ set-activity-monitor-preferences
 # User Environment                                                            #
 ###############################################################################
 
-# Generate SSH Key Pairs
-generate-ssh-keys
+# Setup Git User environment
+configure-git-env
 
 # Install Homebew and base formulas and casks in Brewfile
 setup-homebrew
@@ -368,7 +390,8 @@ declare archiveFiles=(
 )
 
 # Set default applications
-for t in "${webUrisFiles[@]}"; do set-default-browser "$t" ; done
+# for t in "${webUrisFiles[@]}"; do set-default-browser "$t" ; done
+configure-default-browser
 for t in "${textFiles[@]}"; do set-default-editor "$t" ; done
 for t in "${archiveFiles[@]}"; do set-default-archiver "$t" done
 

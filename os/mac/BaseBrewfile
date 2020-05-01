@@ -10,6 +10,7 @@ brew "curl"
 brew "dockutil"
 brew "mas"
 brew "duti"
+brew "defaultbrowser"
 
 # Default Apps
 cask "iterm2"
