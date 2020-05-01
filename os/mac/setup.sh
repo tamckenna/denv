@@ -136,6 +136,10 @@ function get-mac-volume(){
     echo "$macVolume"
 }
 
+function disable-app-verification(){
+    sudo spctl --master-disable
+}
+
 function set-finder-preferences(){
     # Set Desktop as the default location for new Finder windows; For other paths, use `PfLo` and `file:///full/path/here/`
     defaults write com.apple.finder NewWindowTarget -string "PfDe"
@@ -261,6 +265,7 @@ function setup-homebrew(){
 }
 
 # Export all script functions
+export -f disable-app-verification
 export -f user-input-selection
 export -f get-cask-artifact
 export -f configure-system-name
@@ -415,6 +420,9 @@ run-sudo-and-keep-alive
 
 # Disable Password for sudo
 disable-sudo-password
+
+# Disable App Verificaiton
+disable-app-verification
 
 # Set System Name
 configure-system-name "$newComputerName" "$newDomainName"
