@@ -185,6 +185,17 @@ function disable-app-verification(){
     sudo spctl --master-disable
 }
 
+function enable-do-not-disturb(){
+    defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean true
+    defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturbDate -date "`date -u +\"%Y-%m-%d %H:%M:%S +0000\"`"
+    killall NotificationCenter
+}
+
+function disable-do-not-disturb(){
+    defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean false
+    killall NotificationCenter
+}
+
 function set-finder-preferences(){
     # Set Desktop as the default location for new Finder windows; For other paths, use `PfLo` and `file:///full/path/here/`
     defaults write com.apple.finder NewWindowTarget -string "PfDe"
@@ -297,7 +308,7 @@ function install-base-bundle(){
 
 # Setup Homebrew
 function setup-homebrew(){
-    echo "Installing xCode Command Line tools & Homebrew. This may take a few minutes..."
+    echo "Installing Command Line Tools for Xcode & Homebrew..."
     install-homebrew >/dev/null 2>&1
     bundleFile=$HOME/.Brewfile
     curl -s "${baseUrl}/master/os/mac/GlobalBrewfile" -o $bundleFile >/dev/null
@@ -305,7 +316,7 @@ function setup-homebrew(){
     sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $bundleFile
     sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $bundleFile
     sed -i ""  "s/REPLACE_ME_DEFAULT_ARCHIVE_TOOL/$archiver/g" $bundleFile
-    echo "Installing dependency forumulas and casks. This may take a few minutes..."
+    echo "Installing base Formulaes and Casks from Homebrew..."
     install-base-bundle >/dev/null 2>&1
 }
 
@@ -338,6 +349,8 @@ export -f get-current-computer-sleep-setting
 export -f get-current-disk-sleep-setting
 export -f set-computer-sleep-setting
 export -f set-disk-sleep-setting
+export -f enable-do-not-disturb
+export -f disable-do-not-disturb
 export -f set-finder-preferences
 export -f set-activity-monitor-preferences
 export -f set-bash-shell
@@ -511,17 +524,18 @@ export remoteServices
 # Execute Input Configuration
 
 
-# Disable system sleep for disk & computer
-startDiskSleep=`get-current-disk-sleep-setting`
-startComputerSleep=`get-current-computer-sleep-setting`
-set-disk-sleep-setting "Never"
-set-computer-sleep-setting "Never"
-
 # Run sudo and keep timestamp refreshed till end of script
 run-sudo-and-keep-alive
 
 # Disable Password for sudo for at least the rest of the script
 disable-sudo-password
+
+# Disable system sleep for disk/computer and turn on do not disturb mode
+startDiskSleep=`get-current-disk-sleep-setting`
+startComputerSleep=`get-current-computer-sleep-setting`
+set-disk-sleep-setting "Never"
+set-computer-sleep-setting "Never"
+enable-do-not-disturb
 
 # Disable App Verificaiton
 disable-app-verification
@@ -643,9 +657,10 @@ patch-sytem
 # Setup denv desktop for next steps
 setup-denv-desktop
 
-# Reset sleep settings to original values
+# Reset sleep settings to original values & turn off do not disturb mode
 set-disk-sleep-setting "$startDiskSleep"
 set-computer-sleep-setting "$startComputerSleep"
+disable-do-not-disturb
 
 # Require Sudo Password if required
 if [ "$sudoPassRequired" = "y" ]; then

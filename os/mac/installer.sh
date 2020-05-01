@@ -30,12 +30,25 @@ function set-disk-sleep-setting(){
     sudo systemsetup -setharddisksleep "$1" > /dev/null
 }
 
+function enable-do-not-disturb(){
+    defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean true
+    defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturbDate -date "`date -u +\"%Y-%m-%d %H:%M:%S +0000\"`"
+    killall NotificationCenter
+}
+
+function disable-do-not-disturb(){
+    defaults -currentHost write ~/Library/Preferences/ByHost/com.apple.notificationcenterui doNotDisturb -boolean false
+    killall NotificationCenter
+}
+
 startDiskSleep=`get-current-disk-sleep-setting`
 startComputerSleep=`get-current-computer-sleep-setting`
 set-disk-sleep-setting "Never"
 set-computer-sleep-setting "Never"
+enable-do-not-disturb
 
 cd $HOME/Desktop/denv && brew bundle
 
 set-disk-sleep-setting "$startDiskSleep"
 set-computer-sleep-setting "$startComputerSleep"
+disable-do-not-disturb
