@@ -120,7 +120,7 @@ function build-denv-desktop-readme(){
 function setup-denv-desktop(){
     denvDir=$HOME/Desktop/denv
     mkdir -p $denvDir
-    curl -s "${baseUrl}/master/os/mac/AddonBrewfile" -o $denvDir/Brewfile > /dev/null
+    curl -s "${baseUrl}/master/os/mac/CustomBrewfile" -o $denvDir/Brewfile > /dev/null
     build-system-setup-script
     build-installer-script
     build-denv-desktop-readme
@@ -262,7 +262,7 @@ function setup-homebrew(){
     echo "Installing xCode Command Line tools & Homebrew. This may take a few minutes..."
     install-homebrew >/dev/null 2>&1
     bundleFile=$HOME/.Brewfile
-    curl -s "${baseUrl}/master/os/mac/BaseBrewfile" -o $bundleFile >/dev/null
+    curl -s "${baseUrl}/master/os/mac/GlobalBrewfile" -o $bundleFile >/dev/null
 
     sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $bundleFile
     sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $bundleFile
