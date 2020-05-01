@@ -18,9 +18,15 @@ function user-input-selection(){
 }
 
 function configure-system-name(){
-    sudo scutil --set HostName "$1.$2"
-    sudo scutil --set LocalHostName "$1.$2"
-    sudo scutil --set ComputerName "$1"
+    # Can't run these commands each with sudo; Script itself has to be run with sudo
+    scriptFile=/tmp/set-system-name.sh
+    echo '#!/bin/sh' > $scriptFile
+    echo "scutil --set HostName $1.$2" >> $scriptFile
+    echo "scutil --set LocalHostName $1.$2" >> $scriptFile
+    echo "scutil --set ComputerName $1" >> $scriptFile
+    chmod +x $scriptFile
+    sudo $scriptFile
+    rm $scriptFile
 }
 
 function get-cask-artifact(){
@@ -58,10 +64,16 @@ function patch-sytem(){
     sudo softwareupdate -ia > /dev/null
 }
 function configure-git-env(){
-    ssh-keygen -q -N "" -f $HOME/.ssh/id_rsa
+    if [ ! -f ~/.ssh/id_rsa ]; then
+        ssh-keygen -q -N "" -f $HOME/.ssh/id_rsa
+    fi
+
+    if [ ! -f ~/.gitignore_global ]; then
+        echo ".DS_Store" >> $HOME/.gitignore_global
+    fi
+    
     git config --global user.name "$fullName"
     git config --global user.email "$userEmail"
-    echo ".DS_Store" >> $HOME/.gitignore_global
     git config --global core.excludesfile ~/.gitignore_global
 }
 function autohide-dock(){
@@ -70,7 +82,7 @@ function autohide-dock(){
 
 function disable-sudo-password(){
     # Can't run these commands each with sudo; Script itself has to be run with sudo
-    echo '#!/bin/sh' >> /tmp/disable_sudo_password.sh
+    echo '#!/bin/sh' > /tmp/disable_sudo_password.sh
     echo 'chmod +w /etc/sudoers' >> /tmp/disable_sudo_password.sh
     echo 'echo "" >> /etc/sudoers' >> /tmp/disable_sudo_password.sh
     echo 'echo "%admin          ALL = (ALL) NOPASSWD:ALL" >> /etc/sudoers' >> /tmp/disable_sudo_password.sh
@@ -282,6 +294,7 @@ while [ "$confirm" != "y" ]; do
     echo "System Name"
     read -p "   Domain Name [local]: " newDomainName
     read -p "   Computer Name [my-mac]: " newComputerName
+    echo ""
 
     # Local User
     echo "Local System Account"
@@ -483,7 +496,7 @@ declare addDockList=(
 
 # Add apps in list to dock
 for a in "${addDockList[@]}"; do
-    dockutil --before "App Store" --add "$a"
+    dockutil --before "App Store" --add "$a" > /dev/null 2>&1
 done
 
 # Enable/Disable Remote Services
