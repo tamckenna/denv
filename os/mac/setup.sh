@@ -151,6 +151,36 @@ function get-mac-volume(){
     echo "$macVolume"
 }
 
+function get-current-computer-sleep-setting(){
+    currentSleepConfig=`sudo systemsetup -getcomputersleep`
+    removePhrase1="Computer Sleep: "
+    removePhrase2="after "
+    removePhrase3=" minutes"
+    currentSleepConfig=`printf '%s\n' "${currentSleepConfig//$removePhrase1/}"`
+    currentSleepConfig=`printf '%s\n' "${currentSleepConfig//$removePhrase2/}"`
+    currentSleepConfig=`printf '%s\n' "${currentSleepConfig//$removePhrase3/}"`
+    echo "$currentSleepConfig"
+}
+
+function get-current-disk-sleep-setting(){
+    currentSleepConfig=`sudo systemsetup -getharddisksleep`
+    removePhrase1="Hard Disk Sleep: "
+    removePhrase2="after "
+    removePhrase3=" minutes"
+    currentSleepConfig=`printf '%s\n' "${currentSleepConfig//$removePhrase1/}"`
+    currentSleepConfig=`printf '%s\n' "${currentSleepConfig//$removePhrase2/}"`
+    currentSleepConfig=`printf '%s\n' "${currentSleepConfig//$removePhrase3/}"`
+    echo "$currentSleepConfig"
+}
+
+function set-computer-sleep-setting(){
+    sudo systemsetup -setcomputersleep "$1" > /dev/null
+}
+
+function set-disk-sleep-setting(){
+    sudo systemsetup -setharddisksleep "$1" > /dev/null
+}
+
 function disable-app-verification(){
     sudo spctl --master-disable
 }
@@ -304,6 +334,10 @@ export -f build-denv-desktop-readme
 export -f setup-denv-desktop
 export -f run-sudo-and-keep-alive
 export -f get-mac-volume
+export -f get-current-computer-sleep-setting
+export -f get-current-disk-sleep-setting
+export -f set-computer-sleep-setting
+export -f set-disk-sleep-setting
 export -f set-finder-preferences
 export -f set-activity-monitor-preferences
 export -f set-bash-shell
@@ -477,8 +511,11 @@ export remoteServices
 # Execute Input Configuration
 
 
-# Caffeinate macOS for 1 hour so it doesn't fall asleep during install
-caffeinate-mac-one-hour
+# Disable system sleep for disk & computer
+startDiskSleep=`get-current-disk-sleep-setting`
+startComputerSleep=`get-current-computer-sleep-setting`
+set-disk-sleep-setting "Never"
+set-computer-sleep-setting "Never"
 
 # Run sudo and keep timestamp refreshed till end of script
 run-sudo-and-keep-alive
@@ -606,8 +643,9 @@ patch-sytem
 # Setup denv desktop for next steps
 setup-denv-desktop
 
-# Stop Caffeinate
-stop-caffeinate
+# Reset sleep settings to original values
+set-disk-sleep-setting "$startDiskSleep"
+set-computer-sleep-setting "$startComputerSleep"
 
 # Require Sudo Password if required
 if [ "$sudoPassRequired" = "y" ]; then
