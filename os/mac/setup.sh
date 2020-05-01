@@ -12,9 +12,15 @@ function user-input-selection(){
         echo "   - ${count} ${o}"
         ((count++))
     done
-    read -p "Input[0]: " id
+    read -p "Default [0]: " id
     echo ""
     export selection="${list[id]:=${list[0]}}"
+}
+
+function configure-system-name(){
+    sudo scutil --set HostName "$1.$2"
+    sudo scutil --set LocalHostName "$1.$2"
+    sudo scutil --set ComputerName "$1"
 }
 
 function get-cask-artifact(){
@@ -206,14 +212,14 @@ function configure-default-browser(){
 
 # Enable Remote Login(SSH Server) & Remote Management(VNC Server)
 function enable-remote-services(){
-    sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist
-    sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users admin -privs -all -restart -agent -menu
+    sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist > /dev/null
+    sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users admin -privs -all -restart -agent -menu > /dev/null
 }
 
 # Disable Remote Login(SSH Server) & Remote Management(VNC Server)
 function disable-remote-services(){
-    sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist
-    sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -deactivate
+    sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist > /dev/null
+    sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -deactivate > /dev/null
 }
 
 function install-homebrew(){
@@ -236,6 +242,7 @@ function setup-homebrew(){
 # Export all script functions
 export -f user-input-selection
 export -f get-cask-artifact
+export -f configure-system-name
 export -f get-app-bundle-id
 export -f get-cask-bundle-id
 export -f set-default-app
@@ -266,7 +273,15 @@ export -f setup-homebrew
 ###############################################################################
 # User Input Configurations                                                   #
 ###############################################################################
+echo "Please input your configuration below."
+echo "Defaults will be inside of the brackets [...]"
+echo ""
 while [ "$confirm" != "y" ]; do
+
+    # System Name
+    echo "System Name"
+    read -p "   Domain Name [local]: " newDomainName
+    read -p "   Computer Name [my-mac]: " newComputerName
 
     # Local User
     echo "Local System Account"
@@ -300,18 +315,23 @@ while [ "$confirm" != "y" ]; do
     echo ""
 
     # Enable Apple "Natural" scrolling
-    read -p "   - Enable \"Natural\" Scrolling? (y/n): " appleScroll
+    read -p "   - Enable \"Natural\" Scrolling? [y/n]: " appleScroll
     appleScroll=`echo "${appleScroll:=n}" | tr '[:upper:]' '[:lower:]'`
 
     # Enable Remote Services (openSSH server & VNC Server)
-    read -p "   - Enable Remote Services(SSH/VNC Servers)? (y/n): " remoteServices
+    read -p "   - Enable Remote Services(SSH/VNC Servers)? [y/n]: " remoteServices
     remoteServices=`echo "${remoteServices:=y}" | tr '[:upper:]' '[:lower:]'`
 
     # Base Git Repo Raw URL
     defaultUrl="https://raw.githubusercontent.com/tamckenna/denv"
-    read -p "   - Custom Content URL[Leave empty for Default]: " baseUrl
+    read -p "   - Custom Content URL: " baseUrl
     baseUrl="${baseUrl:=${defaultUrl}}"
 
+    echo ""
+    echo "System Name"
+    echo "   Domain: $newDomainName"
+    echo "   Computer: $newComputerName"
+    echo "   FQDN: $newComputerName.$newDomainName"
     echo ""
     echo "Local System Account"
     echo "   Username: $USER"
@@ -346,6 +366,8 @@ export appleScroll
 export baseUrl
 export fullName
 export userEmail
+export newComputerName
+export newDomainName
 
 ###############################################################################
 # Execute Configuration Inputed                                               #
@@ -359,6 +381,9 @@ run-sudo-and-keep-alive
 
 # Disable Password for sudo
 disable-sudo-password
+
+# Set System Name
+configure-system-name "$newComputerName" "$newDomainName"
 
 # Identify volume macOS is running on
 defaultVolume=/Volumes/Macintosh\ HD
