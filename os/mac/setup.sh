@@ -242,17 +242,22 @@ function install-homebrew(){
     fi
 }
 
+function install-base-bundle(){
+    brew bundle --global
+}
+
 # Setup Homebrew
 function setup-homebrew(){
     echo "Installing xCode Command Line tools & Homebrew. This may take a few minutes..."
     install-homebrew >/dev/null 2>&1
-    curl -s "${baseUrl}/master/os/mac/BaseBrewfile" -o $HOME/Brewfile >/dev/null
+    bundleFile=$HOME/.Brewfile
+    curl -s "${baseUrl}/master/os/mac/BaseBrewfile" -o $bundleFile >/dev/null
 
-    sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $HOME/Brewfile
-    sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $HOME/Brewfile
-    sed -i ""  "s/REPLACE_ME_DEFAULT_ARCHIVE_TOOL/$archiver/g" $HOME/Brewfile
+    sed -i ""  "s/REPLACE_ME_DEFAULT_EDITOR/$editor/g" $bundleFile
+    sed -i ""  "s/REPLACE_ME_DEFAULT_BROWSER/$browser/g" $bundleFile
+    sed -i ""  "s/REPLACE_ME_DEFAULT_ARCHIVE_TOOL/$archiver/g" $bundleFile
     echo "Installing dependency forumulas and casks. This may take a few minutes..."
-    brew bundle --global >/dev/null 2>&1
+    install-base-bundle >/dev/null 2>&1
 }
 
 # Export all script functions
@@ -284,6 +289,7 @@ export -f configure-default-browser
 export -f enable-remote-services
 export -f disable-remote-services
 export -f install-homebrew
+export -f install-base-bundle
 export -f setup-homebrew
 
 ###############################################################################
