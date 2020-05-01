@@ -1,0 +1,51 @@
+# Homebrew Taps
+tap "homebrew/cask"
+tap "homebrew/cask-drivers"
+tap "homebrew/cask-versions"
+tap "aws/tap"
+
+# Core Formulas
+
+# C tools
+brew "gcc"
+brew "cmake"
+brew "automake"
+brew "clang-format"
+
+# Shells
+brew "bash"
+brew "bash-completion"
+brew "zsh"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "ksh"
+cask "powershell"
+brew "man-db"
+
+# Tools
+brew "wget"
+brew "curl"
+brew "telnet"
+brew "htop"
+brew "vim"
+brew "nano"
+brew "dos2unix"
+brew "p7zip"
+brew "dtrx"
+brew "tldr"
+brew "fio"
+brew "speedtest-cli"
+brew "dockutil"
+brew "mas"
+brew "duti"
+brew "nativefier"
+
+# Getting Started Apps
+cask "visual-studio-code"
+cask "vnc-viewer"
+cask "iterm2"
+cask "google-chrome"
+cask "macs-fan-control"
+cask "keka"
+cask "appcleaner"
+cask "balenaetcher"
