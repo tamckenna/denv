@@ -1,8 +1,5 @@
 # Homebrew Taps
 tap "homebrew/cask"
-tap "homebrew/cask-drivers"
-tap "homebrew/cask-versions"
-tap "aws/tap"
 
 # CLI Utilities used in setup
 brew "wget"
