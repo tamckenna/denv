@@ -225,8 +225,8 @@ function configure-default-browser(){
 
 # Enable Remote Login(SSH Server) & Remote Management(VNC Server)
 function enable-remote-services(){
-    sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist > /dev/null
-    sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users admin -privs -all -restart -agent -menu > /dev/null
+    sudo launchctl load -w /System/Library/LaunchDaemons/ssh.plist > /dev/null 2>&1
+    sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users admin -privs -all -restart -agent -menu > /dev/null 2>&1
 }
 
 # Disable Remote Login(SSH Server) & Remote Management(VNC Server)
