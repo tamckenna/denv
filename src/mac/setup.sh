@@ -23,6 +23,11 @@ function default-input-selection(){
     export selection="${list[id]:=${list[0]}}"
 }
 
+function remove-misc-files(){
+    rm -f $HOME/.wget-hsts > /dev/null 2>&1
+    rm -f $HOME/.Brewfile.lock.json > /dev/null 2>&1
+}
+
 function configure-system-name(){
     # Can't run these commands each with sudo; Script itself has to be run with sudo
     scriptFile=/tmp/set-system-name.sh
@@ -363,6 +368,7 @@ function setup-homebrew(){
 # Export all script functions
 export -f disable-app-verification
 export -f default-input-selection
+export -f remove-misc-files
 export -f user-input-selection
 export -f get-cask-artifact
 export -f configure-system-name
@@ -712,6 +718,9 @@ patch-sytem
 
 # Setup denv desktop for next steps
 setup-denv-desktop
+
+# Remove leftover files from setup
+remove-misc-files
 
 # Reset sleep settings to original values & turn off do not disturb mode
 set-disk-sleep-setting "$startDiskSleep"
