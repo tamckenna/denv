@@ -298,12 +298,12 @@ function disable-remote-services(){
 function install-homebrew(){
     which -s brew
     if [[ $? != 0 ]] ; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" </dev/null
+        caffeinate -s /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" </dev/null
     fi
 }
 
 function install-base-bundle(){
-    brew bundle --global
+    caffeinate -s brew bundle --global
 }
 
 # Setup Homebrew
