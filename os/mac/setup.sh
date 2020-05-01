@@ -80,7 +80,7 @@ function setup-denv-desktop(){
 }
 
 function run-sudo-and-keep-alive(){
-    echo $userPassword | sudo -vS
+    echo $userPassword | sudo -vS > /dev/null
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
@@ -237,7 +237,7 @@ while [ "$confirm" != "y" ]; do
 
     # Local User
     echo "Local System Account"
-    echo "Username: ${USER}"
+    echo "   Username: ${USER}"
     read -s -p "   Password: " userPassword && echo ""
     echo ""
 
@@ -351,11 +351,11 @@ set-activity-monitor-preferences
 # User Environment                                                            #
 ###############################################################################
 
-# Setup Git User environment
-configure-git-env
-
 # Install Homebew and base formulas and casks in Brewfile
 setup-homebrew
+
+# Setup Git User environment
+configure-git-env
 
 # Gather Default Bundle Ids for default applications
 if [ "$browser" = "safari" ]; then browserId="com.apple.Safari" ;
