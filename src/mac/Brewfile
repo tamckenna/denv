@@ -5,7 +5,6 @@ tap "homebrew/cask"
 brew "wget"
 brew "curl"
 brew "dockutil"
-brew "mas"
 brew "duti"
 brew "defaultbrowser"
 
@@ -14,6 +13,3 @@ brew "defaultbrowser"
 cask "REPLACE_ME_DEFAULT_EDITOR"
 cask "REPLACE_ME_DEFAULT_BROWSER"
 cask "REPLACE_ME_DEFAULT_ARCHIVE_TOOL"
-
-# Run while running installer script
-cask "macs-fan-control"
