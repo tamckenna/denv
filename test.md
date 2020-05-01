@@ -10,7 +10,8 @@
 
 3. Restart sytem and hold [ Super+R ] to boot into Recovery mode
     * When in Recovery mode go to: Utilities -> Terminal
-    * Run the command below
-        * Might want to take a picture or a note, since you will not be able to copy/paste
+    * Run the following command (Take a picture or note since you will not be able to copy/paste)
 
     ```bash
+    /Volumes/Macintosh\ HD/Users/admin/Desktop/denv/system-setup.sh
+    ```
