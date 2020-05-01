@@ -47,7 +47,7 @@ set-disk-sleep-setting "Never"
 set-computer-sleep-setting "Never"
 enable-do-not-disturb
 
-cd $HOME/Desktop/denv && brew bundle
+cd $HOME/Desktop/denv && caffeinate -s brew bundle
 
 set-disk-sleep-setting "$startDiskSleep"
 set-computer-sleep-setting "$startComputerSleep"
