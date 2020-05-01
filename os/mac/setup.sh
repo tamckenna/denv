@@ -95,7 +95,7 @@ function disable-sudo-password(){
 function build-system-setup-script(){
     scriptFile=$HOME/Desktop/denv/system-setup.sh
     tmpfFile=$scriptFile.tmp
-    curl -s "${baseUrl}/master/os/mac/AddonBrewfile" -o $scriptFile
+    curl -s "${baseUrl}/master/os/mac/base-system-setup.sh" -o $scriptFile
     echo "export ROOT_PATH=${macVolume}" | cat - $scriptFile > $tmpfFile && mv -f $tmpfFile $scriptFile
     echo "" | cat - $scriptFile > $tmpfFile && mv -f $tmpfFile $scriptFile
     echo "#!/bin/sh" | cat - $scriptFile > $tmpfFile && mv -f $tmpfFile $scriptFile
