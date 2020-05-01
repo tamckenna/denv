@@ -580,6 +580,8 @@ export sudoPassRequired
 export remoteServices
 export defaultShell
 
+# Homebrew Continuous Integration Flag; Speeds up install
+export CI=1
 
 # Execute Input Configuration
 echo "We'll automate the rest from here. Take a break; you deserve it!"
