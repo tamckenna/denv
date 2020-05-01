@@ -311,11 +311,13 @@ while [ "$confirm" != "y" ]; do
     echo ""
 
     # Git User Setup
-    echo "Git User Setup"
-    read -p "   Full Name: " fullName
-    read -p "   Git Email: " userEmail
-    echo ""
-
+    if [ ! -f ~/.gitconfig ]; then
+        echo "Git User Setup"
+        read -p "   Full Name: " fullName
+        read -p "   Git Email: " userEmail
+        echo ""
+    fi
+    
     # Select Default Browser
     export declare list=("google-chrome" "safari" "firefox" "microsoft-edge" "tor-browser" "opera" "brave-browser")
     user-input-selection "Default Browser"
@@ -357,10 +359,12 @@ while [ "$confirm" != "y" ]; do
     echo "Local System Account"
     echo "   Username: $USER"
     echo "   Password: ${userPassword//?/*}"
-    echo ""
-    echo "Git User Config"
-    echo "   Full Name: $fullName"
-    echo "   Email: $userEmail"
+    if [ ! -f ~/.gitconfig ]; then
+        echo ""
+        echo "Git User Config"
+        echo "   Full Name: $fullName"
+        echo "   Email: $userEmail"
+    fi
     echo ""
     echo "Default Applications:"
     echo "   Browser: $browser"
