@@ -635,10 +635,10 @@ remove-dock-default-apps
 browserApp=`get-cask-artifact $browser`
 editorApp=`get-cask-artifact $editor`
 
-# Items in array will be placed from right to left on dock
+# Dock app order will follow order in arry (left to right)
 declare addDockList=(
-    "/Applications/${editorApp}" "/Applications/iTerm.app"
-    "/Applications/${browserApp}"
+    "/Applications/${browserApp}" "/Applications/iTerm.app"
+    "/Applications/${editorApp}"
 )
 
 # Add apps in list to dock
