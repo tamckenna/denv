@@ -1,9 +1,10 @@
 #!/bin/bash
 
 echo ""
-###############################################################################
-# Script Level Functions                                                      #
-###############################################################################
+
+# Script Level Functions
+
+
 function user-input-selection(){
     echo "${1}:"
     count=0
@@ -12,7 +13,7 @@ function user-input-selection(){
         echo "   - ${count} ${o}"
         ((count++))
     done
-    read -p "Default [0]: " id
+    read -p "Selection [0]: " id
     echo ""
     export selection="${list[id]:=${list[0]}}"
 }
@@ -305,11 +306,12 @@ export -f install-homebrew
 export -f install-base-bundle
 export -f setup-homebrew
 
-###############################################################################
-# User Input Configurations                                                   #
-###############################################################################
+
+# User Input Configurations
+
+
 echo "Please input your configuration below."
-echo "   - Defaults will be inside of the brackets [...]"
+echo "   - Defaults will be inside of brackets [...]"
 echo "   - Leave input empty if you are unsure."
 echo ""
 while [ "$confirm" != "y" ]; do
@@ -416,9 +418,9 @@ export userEmail
 export newComputerName
 export newDomainName
 
-###############################################################################
-# Execute Configuration Inputed                                               #
-###############################################################################
+
+# Execute Input Configuration
+
 
 # Caffeinate macOS for 1 hour so it doesn't fall asleep during install
 caffeinate-mac-one-hour
@@ -440,9 +442,9 @@ defaultVolume=/Volumes/Macintosh\ HD
 macVolume=`get-mac-volume`
 export macVolume="${macVolume:=${defaultVolume}}"
 
-###############################################################################
-# System Preferences                                                          #
-###############################################################################
+
+# System Preferences
+
 
 # Apple's "Natural" Scrolling
 scrollBool="false"
@@ -457,9 +459,9 @@ set-finder-preferences
 # Set Activity Monitor Preferences
 set-activity-monitor-preferences
 
-###############################################################################
-# User Environment                                                            #
-###############################################################################
+
+# User Environment
+
 
 # Install Homebew and base formulas and casks in Brewfile
 setup-homebrew
