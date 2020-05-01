@@ -94,7 +94,7 @@ function disable-sudo-password(){
 }
 
 function build-system-setup-script(){
-    scriptFile=$HOME/Desktop/denv/system-setup.sh
+    scriptFile=$HOME/denv-setup.sh
     tmpfFile=$scriptFile.tmp
     curl -s "${baseUrl}/master/os/mac/base-system-setup.sh" -o $scriptFile
     echo "export ROOT_PATH=${macVolume}" | cat - $scriptFile > $tmpfFile && mv -f $tmpfFile $scriptFile
@@ -113,7 +113,7 @@ function build-denv-desktop-readme(){
     readmeFile=$HOME/Desktop/README.md
     curl -s "${baseUrl}/master/os/mac/desktop-readme.md" -o $readmeFile
     echo "" >> $readmeFile
-    echo "    ${macVolume}/Users/$USER/Desktop/denv/system-setup.sh" >> $readmeFile
+    echo "    ${macVolume}/Users/$USER/denv-setup.sh" >> $readmeFile
     echo "    \`\`\`" >> $readmeFile
     echo "" >> $readmeFile
 }
